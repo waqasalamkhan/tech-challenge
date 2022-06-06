@@ -1,6 +1,7 @@
 import LevelsService from "./levels.js";
 
 class StatesService{
+
     constructor(settings, log, trace){
         this.settings = settings;
         this.log = log;
@@ -62,6 +63,7 @@ class StatesService{
      * @param  {[type]} state_number [description]
      * @return {[type]}              [description]
      */
+
     get(state_number){
       return this.states[state_number];
     }
@@ -718,7 +720,6 @@ class StatesService{
       this.setStateLevels(unlinked_state_numbers, ++level);
     }
   
-  
     /**
      * [getNodes get state nodes (for state navigator)]
      * @return {[type]} [array of state nodes]
@@ -804,7 +805,6 @@ class StatesService{
    
       return edges;
     }
-  
   
   }
 
