@@ -700,7 +700,7 @@ const options = {
             levelSeparation: 150,
             nodeSpacing: 150,
             treeSpacing: 150,
-            blockShifting: true,
+            blockShifting: false,
             edgeMinimization: true,
             parentCentralization: true,
             direction: 'UD',        // UD, DU, LR, RL
@@ -744,15 +744,15 @@ nodes.forEach(node => {
 
     switch (node.label[4]) {
         case 'J':
-            node['color'] = '#FFCDD2';
+            node['color'] = '#EF9A9A';
             break;
 
         case 'I':
-            node['color'] = '#C8E6C9';
+            node['color'] = '#A5D6A7';
             break;
 
         default:
-            node['color'] = '#CFD8DC';
+            node['color'] = '#EEEEEE';
     }
 
     node['shape'] = 'box';
@@ -857,9 +857,52 @@ function removeEdge() {
     }
 }
 
+function OnPageLoadTriggerBaseNode(nodeid) {
+
+    var node = graph.body.nodes[nodeid];
+
+    graph.focus(nodeid, { animation: true, scale: 0.3 });
+    graph.selectNodes([nodeid]);
+
+    $("#selectedNodeDetails").html("");
+
+    for (const [key, value] of states.states[nodeid].entries()) {
+
+        if (key == "states_to") {
+            for (const [key, values] of value.entries()) {
+                $("#selectedNodeDetails").append(`
+                        <p>Jump To ><span class="jump-to-state" data-id="${values}">${values}</span></p>
+                    `)
+            }
+        } else {
+            $("#selectedNodeDetails").append(`
+                    <p>${key.replace(/_/g, ' ')}:<span>${value}</span></p>
+                `)
+        }
+
+
+
+    }
+
+    $("#selectedNode").fadeIn(50);
+
+    node.setOptions({
+        font: {
+            background: "#2196F3",
+            color: "#fff",
+        },
+    });
+
+    $(".jump-to-state").off("click");
+    $(".jump-to-state").on("click", function () {
+        OnPageLoadTriggerBaseNode($(this).text());
+    })
+
+}
+
 $(document).ready(function () {
 
-    graph.focus("000", { scale: 0.2 })
+    OnPageLoadTriggerBaseNode("000");
 
     graph.on("selectNode", function (params) {
         var selectedNodeId = params.nodes[0];
@@ -869,12 +912,10 @@ $(document).ready(function () {
 
         for (const [key, value] of states.states[selectedNodeId].entries()) {
 
-            
-
             if (key == "states_to") {
                 for (const [key, values] of value.entries()) {
                     $("#selectedNodeDetails").append(`
-                        <p>States To ><span>${values}</span></p>
+                        <p>Jump To ><span class="jump-to-state" data-id="${values}">${values}</span></p>
                     `)
                 }
             } else {
@@ -896,6 +937,11 @@ $(document).ready(function () {
             },
         });
 
+        $(".jump-to-state").off("click");
+        $(".jump-to-state").on("click", function () {
+            OnPageLoadTriggerBaseNode($(this).text());
+        })
+
     });
 
     graph.on("deselectNode", function (params) {
@@ -908,6 +954,11 @@ $(document).ready(function () {
                 color: nodes.color
             }
         });
+
+        $(".jump-to-state").off("click");
+        $(".jump-to-state").on("click", function () {
+            OnPageLoadTriggerBaseNode($(this).text());
+        })
 
     });
 
@@ -930,8 +981,6 @@ $(document).ready(function () {
     $(".close-node-details").on("click", function () {
         $("#selectedNode").fadeOut(50);
     })
-
-    
 
 })
 
