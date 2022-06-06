@@ -1,0 +1,42 @@
+{
+  "name": "atm-states",
+  "version": "0.6.5",
+  "description": "ATM States Service",
+  "main": "lib/states.js",
+  "scripts": {
+    "test": "eslint tests/** lib** && nyc --reporter=html --reporter=lcov ava"
+  },
+  "repository": "https://github.com/timgabets/atm-states",
+  "keywords": [
+    "ATM",
+    "States"
+  ],
+  "ava": {
+    "files": [
+      "tests/*.js"
+    ],
+    "source": [
+      "lib/**/*.{js}"
+    ],
+    "concurrency": 5,
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "powerAssert": false
+  },
+  "author": {
+    "name": "Tim Gabets",
+    "email": "tim@gabets.ru",
+    "url": "http://gabets.ru/"
+  },
+  "license": "LGPL-2.1",
+  "devDependencies": {
+    "ava": "^4.2.0",
+    "eslint": "^8.15.0",
+    "eslint-plugin-import": "^2.8.0",
+    "nyc": "^15.1.0"
+  },
+  "dependencies": {
+    "atm-state-levels": "^1.0.6",
+    "semver": "^5.4.1"
+  }
+}

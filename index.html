@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="module" src="./transfer.js"></script>
+
+        <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"> -->
+
+        <style type="text/css">
+            * {
+                font-family: 'Open Sans', sans-serif;
+            }
+            #mynetwork {
+                width: 80%;
+                height: 79%;
+                border: 1px solid lightgray;
+                display: inline-block;
+                vertical-align: top;
+            }
+            #selectedNode {
+                width: 19%;
+                height: 79%;
+                border: 1px solid lightgray;
+                display: inline-block;
+                vertical-align: top;
+                font-family: monospace;
+                position: relative;
+            }
+            #selectedNode h2 {
+                margin: 0;
+                padding: 10px;
+                font-size: 20px;
+            }
+            #selectedNodeDetails{
+                padding: 10px;
+                max-height: 350px;
+                overflow: auto;
+            }
+            #selectedNodeDetails p {
+                color: rgba(0,0,0,0.6);
+                margin: 0 0 10px 0;
+                font-size: 12px;
+                font-weight: 500;
+            }
+            #selectedNodeDetails span {
+                color: rgba(0,0,0,1);
+                margin-left: 5px;
+                font-weight: 600;
+            }
+            #selectedNode #exportBtn {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                text-align: center;
+                background: #3876c2;
+                color: #fff;
+                height:  40px;
+                line-height: 40px;
+                margin: 5px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-family: sans-serif;
+            }
+            #AddNodeEdge{
+                margin:  0 0 5px 0;
+            }
+            #AddNodeEdge h2 {
+                margin: 5px;
+            }
+            #AddNodeEdge .label {
+                margin: 5px;
+                font-size: 14px;
+                color: rgba(0,0,0,0.7);
+            }
+            #AddNodeEdge input {
+                margin: 5px;
+                width: 150px;
+                font-size: 14px;
+                height: 30px;
+                line-height: 30px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+            }
+            #AddNodeEdge select {
+                margin: 5px;
+                width: 150px;
+                font-size: 14px;
+                height: 30px;
+                line-height: 30px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+            }
+            #AddNodeEdge button {
+                margin: 5px;
+                color: #fff;
+                border: 0;
+                padding:  5px 10px;
+                border-radius: 3px;
+            }
+            #AddNodeEdge .add-btn {
+                background: green;
+            }
+            #AddNodeEdge .update-btn {
+                background: blue;
+            }
+            #AddNodeEdge .remove-btn {
+                background: red;
+            }
+            #AddNodeEdge .NodesWrapper{
+                width: 50%;
+                border: 1px solid lightgray;
+                display: inline-block;
+                vertical-align: top;
+            }
+            #AddNodeEdge .EdgesWrapper{
+                width: 49%;
+                border: 1px solid lightgray;
+                display: inline-block;
+                vertical-align: top;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="AddNodeEdge">
+            <div class="NodesWrapper">
+                <h2>New State</h2>
+                <span class="label"> ID:</span>
+                <input type="text" id="node-id" value="" placeholder="Enter ID" />
+                <span class="label"> Label:</span>
+                <input id="node-label" type="text" value="" placeholder="Enter Name" />
+                <br />
+                <button id="node-add" class="add-btn" onclick="addNode();">Add</button>
+                <button id="node-update" class="update-btn" onclick="updateNode();">Update</button>
+                <button id="node-remove" class="remove-btn" onclick="removeNode();">Remove</button>
+            </div>
+            <div class="EdgesWrapper">
+                <h2>New Connection</h2>
+                <span class="label"> ID:</span>
+                <select name="edge-id" id="edge-id">
+                    
+                </select>
+                <span class="label"> From:</span><input id="edge-from" type="text" value="" placeholder="Node ID" />
+                <span class="label"> To:</span><input id="edge-to" type="text" value="" placeholder="Node ID" />
+                <br />
+                <button id="edge-add" class="add-btn" onclick="addEdge();">Add</button>
+                <button id="edge-update" class="update-btn" onclick="updateEdge();">Update</button>
+                <button id="edge-remove" class="remove-btn" onclick="removeEdge();">Remove</button>
+            </div>
+        </div>
+        <div id="mynetwork"></div>
+        <div id="selectedNode">
+            <h2>Selected Node Details</h2>
+            <div id="selectedNodeDetails">
+                <p>Please select a node to get details</p>
+            </div>
+            <div id="exportBtn">
+                Export States File
+            </div>
+        </div>
+    </body>
+</html>
