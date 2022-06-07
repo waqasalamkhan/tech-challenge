@@ -1,0 +1,927 @@
+<html>
+<head>
+
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <style>
+        <!--
+
+        body {
+            font-family: Arial;
+            font-size: 1.2em;
+            background-color: lightblue;
+        }
+
+        textarea {
+            width: 68%;
+            height: 94vh;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            border: 2px solid #fffcfc;
+            border-radius: 4px;
+            background-color: #1c1b1b;
+            color: white;
+            font-size: 16px;
+            resize: none;
+            font-family: monospace;
+        }
+
+        .ActionButtons {
+            display: inline-block;
+            width: 100px;
+            padding: 10px;
+            box-sizing: border-box;
+            vertical-align: top;
+        }
+            .ActionButtons .ActBtn{
+                width: 100%;
+                height: 52px;
+                background: rgba(23, 172, 172, 1);
+                color: white;
+                border: 1px solid rgba(0, 0, 0, 0.53);
+                cursor: pointer;
+                margin: 5px auto;
+            }
+
+        canvas#terminalScreen {
+            background: transparent;
+        }
+
+        .hiddenFileField {
+            width: 0px;
+            height: 0px;
+            overflow: hidden;
+        }
+
+        .panelBtn {
+            background: rgba(23, 153, 253, 0.72);
+            color: white;
+            padding: 5px;
+            width: 153px;
+            margin: 5px 10px;
+            box-sizing: border-box;
+        }
+
+        .canvasContainer {
+            position: relative;
+            width: 640px;
+            height: 420px;
+            border: 1px solid rgba(0, 0, 0, 0.21);
+            display: inline-block;
+            vertical-align: top;
+            background-size: 100% 100%;
+            background-color: white;
+        }
+
+            .canvasContainer.drawing {
+                cursor: crosshair;
+            }
+
+        .btn_Draw.active {
+            background: green;
+            border: 1px solid black;
+        }
+        
+        .CodePanel{
+            float: left;
+        }
+        .drawingButtonsPanel,
+        .drawingArea,
+        .atmScreens {
+            width: 952px;
+            /*margin: 5px auto;*/
+            background-color: #6f7f8d;
+            float: right;
+            border: 1px dashed rgba(255, 255, 255, 0.6);
+            text-align: center;
+            position: relative;
+        }
+
+
+        .atmButtons,
+        .canvasContainer {
+            display: inline-block;
+            vertical-align: top;
+            /*height: 480px;*/
+        }
+
+        .atmButtons {
+            display: inline-block;
+            width: 100px;
+            padding: 10px;
+            box-sizing: border-box;
+            padding-top: 210px;
+        }
+
+            .atmButtons .atmBtn {
+                width: 100%;
+                height: 52px;
+                background: rgba(23, 172, 172, 1);
+                color: white;
+                border: 1px solid rgba(0, 0, 0, 0.53);
+                cursor: pointer;
+                margin: 5px auto;
+            }
+
+                .atmButtons .atmBtn .action {
+                    font-size: 10px;
+                    font-weight: bold;
+                }
+
+                .atmButtons .atmBtn.btnProgrammed {
+                    background: rgba(23, 153, 253, 1);
+                }
+
+        .atmScreen {
+            width: 110px;
+            height: 83px;
+            margin: 5px;
+            background-size: 100% 100%;
+            display: inline-block;
+            border: 3px solid rgba(251 251 251 / 74%);
+            cursor: pointer;
+            vertical-align: top;
+            box-sizing: border-box;
+        }
+
+            .atmScreen.addNew {
+                border-style: dashed;
+                text-align: center;
+                padding-top: 20px;
+                color: rgba(255 255 255 / 68%);
+            }
+
+            .atmScreen.active {
+                border-color: green;
+            }
+
+        .genericContextMenu {
+            position: absolute;
+            width: 152px;
+            border: 1px solid rgba(0, 0, 0, 0.16);
+            background: rgba(240, 240, 240, 1);
+            cursor: pointer;
+            top: 23px;
+            font-size: 13px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.023);
+            box-sizing: border-box;
+            padding: 3px;
+            text-align: left;
+            line-height: 15px;
+            display: none;
+        }
+
+        .atmScreensContextMenu:hover {
+            background: rgba(253, 240, 223, 1);
+        }
+        
+        .atmButtonsContextMenu span:hover {
+            background: rgba(40, 110, 253, 0.072);
+        }
+
+        .atmButtonsContextMenu {
+            padding: 1px;
+            background-color: white;
+        }
+
+
+        .atmButtonsContextMenu span {
+            display: block;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+      .ActiveImg{
+        border: 1px solid red;
+      }
+    </style>
+
+</head>
+<body>
+    <input type="text" hidden name="" id="ImgID">
+    <input type="text" hidden name="" id="ImgSrc">
+    <div class="CodePanel">
+        <div class="ActionButtons buttonsLeft">
+            <button class="ActBtn btnLeft" btnid="b1" id="AddCursorBtn">Cursor Point <br /></button>
+            <button class="ActBtn btnLeft" btnid="b2"id="AddTextBtn">Text<br /></button>
+            <button class="ActBtn btnLeft" btnid="b3"id="ClearScreenBtn">Clear Screen<br /></button>
+            <button class="ActBtn btnLeft" btnid="b4"id="AddImageBtn">Add Image<br /></button>
+        </div>
+        <textarea id="CodeField" name="CodeField">000</textarea>
+    </div>
+    <div class="drawingButtonsPanel">
+        <div class="hiddenFileField">
+            <input type="file" id="UploadFile" accept="image/png, image/jpeg, image/gif" onchange="onChange_UploadFile()" />
+        </div>
+        <input type="button" class="panelBtn btn_Upload" onclick="onclick_AddBackground()" value="Add Background" />
+        <input type="button" class="panelBtn btn_Draw" onclick="onclick_StartDrawing()" value="Draw Field" />
+    </div>
+    <div class="drawingArea">
+        <div class="atmButtonsContextMenu genericContextMenu">
+            <span class="btnAction" uid="actionNext" lbl="Next Screen">&#187; Next Screen</span>
+            <span class="btnAction" uid="actionPrevious" lbl="Previous Screen">&#171; Previous Screen</span>
+            <span class="btnAction" uid="actionSpecfic" lbl="Specific Screen">&#9856; Specific Screen</span>
+            <span class="btnAction" uid="actionUnassign" lbl="N/A">&#128473; No Action</span>
+        </div>
+        <div class="atmButtons buttonsLeft">
+            <button class="atmBtn btnLeft" btnid="b1">Button 1 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
+            <button class="atmBtn btnLeft" btnid="b2">Button 2 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
+            <button class="atmBtn btnLeft" btnid="b3">Button 3 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
+            <button class="atmBtn btnLeft" btnid="b4">Button 4 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
+        </div>
+        <span class="ATMScreenArea" style="position:relative;">
+            <div class="XCoordinates" style="position:absolute;">
+                <span>@</span>
+                <span>A</span>
+                <span>B</span>
+                <span>C</span>
+            </div>    
+            <div class="canvasContainer">
+                 <canvas id="canvas"></canvas>
+            </div>
+        </span>
+        <div class="atmButtons buttonsRight">
+            <button class="atmBtn btnRight" btnid="b5">Button 5 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
+            <button class="atmBtn btnRight" btnid="b6">Button 6 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
+            <button class="atmBtn btnRight" btnid="b7">Button 7 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
+            <button class="atmBtn btnRight" btnid="b8">Button 8 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
+        </div>
+    </div>
+    <div class="atmScreens">
+        <div class="atmScreensContextMenu genericContextMenu" onclick="onClick_RemoveScreen()">
+            &#10005; Remove this screen
+        </div>
+        <div class="atmScreen editableScreen active" title="Active Screen" uid=""></div>
+        <div class="atmScreen addNew" onclick="onClick_AddNewScreen(event)" title="Add New Screen">Add New Screen</div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="CursorModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Add Cursor Point</h4>
+          </div>
+          <div class="modal-body">
+           <div class="form-group">
+              <label for="CursorRow">Rows</label>
+              <select class="form-control" id="CursorRow" w>
+                <option>@</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+                <option>E</option>
+                <option>F</option>
+                <option>G</option>
+                <option>H</option>
+                <option>I</option>
+                <option>J</option>
+                <option>K</option>
+                <option>L</option>
+                <option>M</option>
+                <option>N</option>
+                <option>O</option>
+              </select>
+              <br>
+              <label for="CursorColumn">Columns</label>
+             <select class="form-control" id="CursorColumn">
+                <option>@</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+                <option>E</option>
+                <option>F</option>
+                <option>G</option>
+                <option>H</option>
+                <option>I</option>
+                <option>J</option>
+                <option>K</option>
+                <option>L</option>
+                <option>M</option>
+                <option>N</option>
+                <option>O</option>
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>:</option>
+                <option>;</option>
+                <option><</option>
+                <option>=</option>
+                <option>></option>
+                <option>?</option>
+            </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="onAddCursorPoint()">Add</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="TextModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Add Text</h4>
+          </div>
+          <div class="modal-body">
+           <div class="form-group">
+            <label for="TextField">Text</label>
+            <input type="text" class="form-control" id="TextField" placeholder="Enter Text">
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="onAddText()">Add</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="ImagesModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Select Image</h4>
+          </div>
+          <div class="modal-body">
+           <div class="form-group">
+            <div class="imageSliderWrapper">
+                <div class="owl-carousel owl-theme">
+                    
+                </div>
+            </div>
+          
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="onAddImageText()">Add</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script type="text/javascript">
+        //Taha
+
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        canvas.width = 640;
+        //canvas.height = 320;
+        canvas.height = 420;
+        var cellSizeWidth = 20;
+        var cellSizeHeight = 26;
+        var grid = [];
+        var centerPoints = [];
+
+        class Cell {
+          constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.z = 0;
+            this.width = cellSizeWidth;
+            this.height = cellSizeHeight;
+            this.c = "#d7d8d9";
+            this.center = { x: this.x + this.width / 2 - canvas.width/2, y: (this.y + this.height / 2 - canvas.height/2) + 1};
+          }
+          draw() {
+            ctx.strokeStyle = this.c;
+            ctx.lineWidth  = 0.5;
+            ctx.strokeRect(this.x, this.y, this.width, this.height);
+          }
+          createArray() {
+            centerPoints.push({'x': this.center.x, 'y': this.z, 'z': this.center.y})
+          }
+        }
+
+        function createGrid() {
+          for (var y = 0; y < canvas.height; y += cellSizeHeight) {
+            for (var x = 0; x < canvas.width; x += cellSizeWidth) {
+              grid.push(new Cell(x, y));
+            }
+          }
+        }
+        createGrid();
+
+        function drawGrid() {
+          for (var i = 0; i < grid.length; i++) {
+            grid[i].draw();
+            grid[i].createArray();
+          }
+        }
+        drawGrid();
+
+        console.log(centerPoints)
+
+        
+
+        //Taha End
+        /*var canvas = document.getElementById("terminalScreen");
+        var ctx = canvas.getContext("2d");
+        var cw = canvas.width;
+        var ch = canvas.height;
+        var activeAction = null;
+        var activeScreenUID = "";
+        var rightClickedScreen = "";
+        */
+        var ScreenID = 0;
+        function reOffset() {
+            var BB = canvas.getBoundingClientRect();
+            offsetX = BB.left;
+            offsetY = BB.top;
+        }
+        var offsetX, offsetY;
+        reOffset();
+        window.onscroll = function (e) { reOffset(); }
+        window.onresize = function (e) { reOffset(); }
+
+        var isDown = false;
+        var startX, startY;
+
+        var atmScreens = [];
+
+        var rects = [];
+        var newRect;
+        var atmBtnID = "";
+
+        $("#terminalScreen").mousedown(function (e) { handleMouseDown(e); });
+        $("#terminalScreen").mousemove(function (e) { handleMouseMove(e); });
+        $("#terminalScreen").mouseup(function (e) { handleMouseUp(e); });
+        $("#terminalScreen").mouseout(function (e) { handleMouseOut(e); });
+
+        /*function handleMouseDown(e) {
+            if (activeAction != "draw") {
+                return;
+            }
+            // tell the browser we're handling this event
+            e.preventDefault();
+            e.stopPropagation();
+
+            startX = parseInt(e.clientX - offsetX);
+            startY = parseInt(e.clientY - offsetY);
+
+            // Put your mousedown stuff here
+            isDown = true;
+        }
+
+        function handleMouseUp(e) {
+            // tell the browser we're handling this event
+            e.preventDefault();
+            e.stopPropagation();
+
+            mouseX = parseInt(e.clientX - offsetX);
+            mouseY = parseInt(e.clientY - offsetY);
+
+            // Put your mouseup stuff here
+            isDown = false;
+
+            if (activeAction == "draw") {
+                if (!willOverlap(newRect)) {
+                    //rects.push(newRect);
+                    atmScreens[activeScreenUID].rect = newRect;
+                }
+            }
+            drawAll();
+        }*/
+
+        /*function drawAll() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 1;
+            ctx.fillStyle = "rgba(10, 253, 153, 0.21)";
+            ctx.strokeStyle = 'green';
+            if (atmScreens[activeScreenUID].rect) {
+                var r = atmScreens[activeScreenUID].rect;
+                ctx.strokeRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+                ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+            }
+
+            var btns = atmScreens[activeScreenUID].buttons;
+            for (var i = 1; i < 9; i++) {
+                $(".atmBtn[btnid='b" + i + "']").find(".actionName").html(btns["b" + i]);
+                $(".atmBtn[btnid='b" + i + "']").removeClass("btnProgrammed");
+                if (btns["b" + i] != "N/A") {
+                    $(".atmBtn[btnid='b" + i + "']").addClass("btnProgrammed");
+                }
+            }
+        }*/
+
+       /* function handleMouseOut(e) {
+            // tell the browser we're handling this event
+            e.preventDefault();
+            e.stopPropagation();
+
+            mouseX = parseInt(e.clientX - offsetX);
+            mouseY = parseInt(e.clientY - offsetY);
+
+            // Put your mouseOut stuff here
+            isDown = false;
+        }
+
+        function handleMouseMove(e) {
+            if (!isDown) { return; }
+            // tell the browser we're handling this event
+            e.preventDefault();
+            e.stopPropagation();
+
+            mouseX = parseInt(e.clientX - offsetX);
+            mouseY = parseInt(e.clientY - offsetY);
+
+            newRect = {
+                left: Math.min(startX, mouseX),
+                right: Math.max(startX, mouseX),
+                top: Math.min(startY, mouseY),
+                bottom: Math.max(startY, mouseY),
+            }
+
+            drawAll();
+            ctx.strokeStyle = "lightgray";
+            ctx.lineWidth = 3;
+            ctx.strokeRect(startX, startY, mouseX - startX, mouseY - startY);
+
+        }*/
+
+        function willOverlap(newRect) {
+
+            // shortcut to the new potential rect
+            var r2 = newRect;
+
+            // test if one rect is completely inside another rect
+            var isInside = function (rect1, rect2) {
+                return (rect2.left >= rect1.left &&
+                    rect2.right <= rect1.right &&
+                    rect2.top >= rect1.top &&
+                    rect2.bottom <= rect1.bottom);
+            }
+
+            // test if the new rect is overlapping any existing rect
+            var isOverlapping = false;
+            for (var i = 0; i < rects.length; i++) {
+                var r1 = rects[i];
+                //
+                var isIntersecting = !(r2.left > r1.right ||
+                    r2.right < r1.left ||
+                    r2.top > r1.bottom ||
+                    r2.bottom < r1.top);
+                //
+                var isContained = isInside(r1, r2) || isInside(r2, r1);
+                //
+                if (isIntersecting || isContained) {
+                    isOverlapping = true;
+                }
+            }
+            return (isOverlapping);
+        }
+
+        function onclick_StartDrawing() {
+            if ($(".btn_Draw").hasClass("active")) {
+                activeAction = "";
+                $(".btn_Draw").removeClass("active");
+                $(".canvasContainer").removeClass("drawing");
+                return;
+            }
+            activeAction = "draw";
+            $(".btn_Draw").addClass("active");
+            $(".canvasContainer").addClass("drawing");
+        }
+
+        function onclick_AddBackground() {
+            $("#UploadFile").trigger("click");
+        }
+
+        function onChange_UploadFile(event) {
+            //var img = new Image();
+            //         img.onload = draw;
+            //         img.onerror = failed;
+            //         img.src = URL.createObjectURL(document.getElementById("UploadFile").files[0]);
+
+            var file = document.getElementById("UploadFile").files[0];
+            var validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+            if (file.size > 512000) {
+                alert("File size should be less than 500KB");
+                return;
+            }
+            if (validImageTypes.indexOf(file.type) < 0) {
+                alert("File upload a valid image file (JPG/PNG/GIF)");
+                return;
+            }
+            var getImagePath = URL.createObjectURL(file);
+            atmScreens[activeScreenUID].url = getImagePath;
+            atmScreens[activeScreenUID].filename = file.name;
+            $('.canvasContainer, .atmScreen.active').css('background-image', 'url("' + getImagePath + '")');
+        }
+
+        /*function draw() {
+            //var canvas = document.getElementById('terminalScreen');
+            //var ctx = canvas.getContext('2d');
+            //ctx.drawImage(this, 0, 0, 640, 480);
+        }*/
+
+        function failed() {
+            console.log("failed");
+        }
+
+        function onClick_AddNewScreen(e) {
+            $(e.target).before("<div class='atmScreen editableScreen'></div>");
+            var newScreenID = "atmSC" + new Date().getTime();
+            activeScreenUID = newScreenID;
+            atmScreens[activeScreenUID] = {
+                url: "",
+                rect: {},
+                buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
+                filename: ""
+            }
+            $(e.target).prev().eq(0).attr("uid", newScreenID).trigger("click");
+            //drawAll();
+            ScreenID++;
+            if(ScreenID == 1){
+                $("#CodeField").append("\n");
+            }
+            var Length = 3;
+            ScreenID = ScreenID.toString();
+            while (ScreenID.length < Length) ScreenID = "0" + ScreenID;
+
+            $("#CodeField").append(ScreenID);
+            $("#CodeField").append("\n");
+        }            
+
+        $(function () {
+            $(".atmScreens").sortable({
+                items: "div:not(.addNew)"
+            });
+            $(".atmScreens").disableSelection();
+            
+            $(document).on("click", "#AddCursorBtn", function (e) {
+                $('#CursorModal').modal('show');
+            });
+
+            $(document).on("click", "#AddTextBtn", function (e) {
+                $('#TextModal').modal('show');
+            });
+
+            $(document).on("click", "#ClearScreenBtn", function (e) {
+                $("#CodeField").append("\n");
+                $("#CodeField").append("CLS");
+            });
+            
+
+            $(document).on("click", "#AddImageBtn", function (e) {
+                $('#ImagesModal').modal('show');
+            });
+
+            $(document).on("click", ".atmScreen.editableScreen", function (e) {
+                $(".atmScreen.editableScreen").attr("title", "Click to edit this screen").removeClass("active");
+                $(e.target).addClass("active").attr("title", "Active Screen");
+                activeScreenUID = $(e.target).attr("uid");
+                $('.canvasContainer').css('background-image', 'url("' + atmScreens[activeScreenUID].url + '")');
+                //drawAll();
+            });
+
+            $(document).on("click", function (e) {
+                if (!$(e.target).hasClass("genericContextMenu")) {
+                    $(".genericContextMenu").hide();
+                }
+            });
+
+            $(document).on("contextmenu", ".atmScreen.editableScreen", function (e) {
+                e.preventDefault();
+                if (!$(e.target).hasClass("active")) {
+                    rightClickedScreen = $(e.target).attr("uid");
+                    $(".atmScreensContextMenu").css("left", $(e.target).position().left + 72).show();
+                }
+            });
+
+            $(document).on("contextmenu", ".atmBtn", function (e) {
+                e.preventDefault();
+                var posL = $(e.currentTarget).position().left + 110;
+                var posT = $(e.currentTarget).position().top + 21;
+
+                if ($(e.currentTarget).hasClass("btnRight")) {
+                    posL = $(e.currentTarget).position().left - 121;
+                }
+
+                $(".atmButtonsContextMenu").css({
+                    "left": posL,
+                    "top": posT,
+                }).show();
+
+                atmBtnID = $(e.currentTarget).attr("btnid");
+
+            });
+
+            $(document).on("click", ".atmButtonsContextMenu .btnAction", function (e) {
+                atmScreens[activeScreenUID].buttons[atmBtnID] = $(e.currentTarget).attr("lbl");
+                $(".genericContextMenu").hide();
+                //drawAll();
+            });
+
+            var newScreenID = "atmSC" + new Date().getTime();
+
+            $(".atmScreen.active").eq(0).attr("uid", newScreenID);
+            activeScreenUID = newScreenID;
+            atmScreens[activeScreenUID] = {
+                url: "",
+                rect: {},
+                buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
+                filename: ""
+            }
+
+            GetAllImagesList();
+            //drawAll();
+        });
+
+        function onClick_RemoveScreen() {
+            if (confirm("This action remove the screen from the set. Are you sure to continue?")) {
+                for (var item in atmScreens) {
+                    if (item == rightClickedScreen) {
+                        delete atmScreens[item];
+                    }
+                }
+                $(".atmScreensContextMenu").hide();
+                $(".atmScreen[uid='" + rightClickedScreen + "']").remove();
+                //drawAll();
+            }
+        }
+
+        function onAddCursorPoint(){
+            var Row = $("#CursorRow").val();
+            var Column = $("#CursorColumn").val();
+            $("#CodeField").append("\n");
+            $("#CodeField").append("SET " + Row + Column);
+            $('#CursorModal').modal('hide');
+        }
+
+        function GetLastLine(){
+            var content = $("#CodeField").val();
+            var lastLine = content.substr(content.lastIndexOf("\n")+1);
+            return lastLine;
+        }
+
+        function GetCursorPoint(LastLine) {
+            var str = LastLine;
+            var after = str.substring(str.indexOf(' ') + 1);
+            var Coordinates = after.split("");
+            return Coordinates;
+        }
+
+        function RenderTextParam(Text, X_Position, Y_Position){
+            var Xaxis = X_Position;
+            var text = Text
+            var myArray = text.split("");
+            for(var i=0; i<myArray.length; i++){
+                ctx.font = "26px Arial";
+                ctx.fillText(myArray[i],Xaxis,Y_Position);
+                Xaxis = Xaxis + 20;
+            }
+        }
+
+        function onAddImageText(){
+            var ImageID = $("#ImgID").val()
+            $("#CodeField").append("\n");
+            $("#CodeField").append("ESC P2 " + ImageID.substring(1, 3) + " ESC" );
+            $('#ImagesModal').modal('hide');
+            $('.canvasContainer, .atmScreen.active').css('background-image', 'url("' + $("#ImgSrc").val() + '")');
+        
+            
+        }
+
+        function onAddText(){
+            var Text = $("#TextField").val();
+            var LastLine = GetLastLine()
+            var Coordinates = GetCursorPoint(LastLine);
+            RenderTextParam(Text ,CoordinateMapX[Coordinates[0]] ,CoordinateMapY[Coordinates[1]] )
+            Text = Text.replace(/ /g,"~");
+            $("#CodeField").append("\n");
+            $("#CodeField").append(Text);
+            $('#TextModal').modal('hide');
+        }
+
+        function GetAllImagesList(){
+            $(".owl-carousel").html("");
+            var dir = "img/";
+            var fileextension = ".jpg";
+            $.ajax({
+                //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+                url: dir,
+                success: function (data) {
+                    //List all .png file names in the page
+                    console.log(data);
+                    $(data).find("a:contains(" + fileextension + ")").each(function () {
+                       console.log(this)
+                        var filename = this.href.replace(window.location.host, "").replace("http://", "");
+                        var n = filename.lastIndexOf('/');
+                        var TrimmedFileName = filename.substring(n + 1);
+                        var tempURL = "http://localhost:81";
+                       
+                        //$(".owl-carousel").append("<div><a target='_blank' href='"+ tempURL + filename + "'>" +
+                         $(".owl-carousel").append("<div><div class='ATMImg' onclick='OnClickSelectImage(event)' uid="+ TrimmedFileName +">" +
+                         "<img src='"+ tempURL + filename + "'style='width:150px'></a>"+
+                         "<label>" + TrimmedFileName +  "</label>" +
+                         "</div>");
+                              
+                            
+                    });
+                    $('.owl-carousel').owlCarousel({
+                        margin:10,
+                        nav:false,
+                        responsive:{
+                            0:{
+                                items:3
+                            },
+                            600:{
+                                items:3
+                            },
+                            1000:{
+                                items:3
+                            }
+                        }
+                    })
+                }
+            });
+        }
+
+        function OnClickSelectImage(event){
+
+            $("#ImgID").val($(event.target).parent().attr("uid"));
+            $("#ImgSrc").val($(event.target).attr("src"));
+
+            $(".ATMImg").removeClass("ActiveImg");
+            $(event.target).parent().addClass("ActiveImg");
+           
+        }
+        var CoordinateMapX = {
+            "@": 0,
+            "A": 20,
+            "B": 40,
+            "C": 60,
+            "D": 80,
+            "E": 100,
+            "F": 120,
+            "G": 140,
+            "H": 160,
+            "I": 180,
+            "J": 200,
+            "K": 220,
+            "L": 240,
+            "M": 260,
+            "N": 280,
+            "O": 300,
+            "0": 320,
+            "1": 340,
+            "2": 360,
+            "3": 380,
+            "4": 400,
+            "5": 420,
+            "6": 440,
+            "7": 460,
+            "8": 480,
+            "9": 500,
+            ":": 520,
+            ";": 540, 
+            "<": 560, 
+            "=": 580, 
+            ">": 600, 
+            "?": 620, 
+        }
+
+        var CoordinateMapY = {
+            "@": 0,
+            "A": 26,
+            "B": 52,
+            "C": 78,
+            "D": 104,
+            "E": 130,
+            "F": 156,
+            "G": 182,
+            "H": 208,
+            "I": 234,
+            "J": 260,
+            "K": 286,
+            "L": 312,
+            "M": 338,
+            "N": 364,
+            "O": 390
+        }
+
+    </script>
+</body>
+</html>
