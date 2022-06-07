@@ -12,6 +12,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
     <style type="text/css">
 
         @keyframes rotation {
@@ -67,7 +69,7 @@
 
         #selectedNodeDetails {
             padding: 10px;
-            max-height: 450px;
+            max-height: 400px;
             overflow: auto;
         }
 
@@ -84,27 +86,35 @@
                 margin-left: 5px;
                 font-weight: 600;
             }
+                #selectedNodeDetails span.material-symbols-outlined {
+                    font-size: 16px;
+                    vertical-align: middle;
+                    margin-left: 2px;
+                    color: #1E88E5 !important;
+                    cursor: pointer;
+                }
 
-        #selectedNode #exportBtn {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            text-align: center;
-            background: #1E88E5;
-            color: #fff;
-            height: 40px;
-            line-height: 40px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: sans-serif;
-            width: 85%;
-            float: none;
-            margin: 0 auto;
-            margin-bottom: 20px;
-        }
+                #selectedNode #exportBtn {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    text-align: center;
+                    background: #1E88E5;
+                    color: #fff;
+                    height: 40px;
+                    line-height: 40px;
+                    margin: 5px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-family: sans-serif;
+                    width: 85%;
+                    float: none;
+                    margin: 0 auto;
+                    margin-bottom: 20px;
+                }
+
             #selectedNode #exportBtn .material-symbols-outlined {
                 vertical-align: middle;
                 margin-left: 5px;
@@ -112,15 +122,16 @@
                 top: -1px;
                 font-size: 20px;
             }
+
                 #selectedNode #exportBtn .material-symbols-outlined.active {
                     -webkit-animation: rotation 2s infinite linear;
                     animation: rotation 2s infinite linear;
                 }
 
-            #AddNodeEdge {
-                margin: 0 0 5px 0;
-                display: none;
-            }
+        #AddNodeEdge {
+            margin: 0 0 5px 0;
+            display: none;
+        }
 
             #AddNodeEdge h2 {
                 margin: 5px;
@@ -187,6 +198,17 @@
             }
 
         .close-node-details {
+            cursor: pointer;
+            position: absolute;
+            right: -0.75rem;
+            top: -0.75rem;
+            font-size: 20px;
+            background: #EF5350;
+            border-radius: 50%;
+            padding: 5px;
+            color: #fff;
+        }
+        .close-node-details-2 {
             cursor: pointer;
             position: absolute;
             right: -0.75rem;
@@ -279,24 +301,245 @@
             text-decoration: underline;
             cursor: pointer;
         }
+        .view-screen {
+            position:relative;
+            top: -0.5px;
+            /*color: #1E88E5 !important;
+            text-decoration: underline;
+            cursor: pointer;*/
+        }
+
         .exported-file-data-wrapper {
             background: #000;
             color: #fff;
             word-break: break-word;
             padding: 1rem;
         }
+
             .exported-file-data-wrapper .spacer {
                 display: block;
                 width: 100%;
                 height: 5px;
             }
-            #ExportedFileDataPreview .modal-body {
-                padding: 0;
+
+        #ExportedFileDataPreview .modal-body {
+            padding: 0;
+        }
+
+        .splash-wrapper {
+            background: #fff;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+        }
+
+            .splash-wrapper lottie-player {
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                text-align: center;
+                top: 50%;
+                transform: translateY(-50%);
+                background: #fff;
+                border-radius: 7px;
+                padding: 1rem;
+                box-shadow: 0 0px 5px 5px rgb(0 0 0 / 5%);
             }
+
+            .splash-wrapper h1 {
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                text-align: center;
+                top: 15%;
+                font-size: 24px;
+                font-weight: 500;
+                color: #6c6c6c;
+                z-index: 999;
+            }
+
+            .splash-wrapper h2 {
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                text-align: center;
+                bottom: 15%;
+                font-size: 16px;
+                font-weight: 400;
+                color: #afafaf;
+            }
+                .splash-wrapper h2 .material-symbols-outlined {
+                    vertical-align: middle;
+                    position:relative;
+                    top: -1px;
+                    -webkit-animation: rotation 2s infinite linear;
+                    animation: rotation 2s infinite linear;
+                }
+
+        .area {
+            background: #EEE;
+            /*background: -webkit-linear-gradient(to left, #EEE, #1E88E5);*/
+            width: 100%;
+            height: 100vh;
+        }
+
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+            .circles li {
+                position: absolute;
+                display: block;
+                list-style: none;
+                width: 20px;
+                height: 20px;
+                background: rgba(255, 255, 255, 0.7);
+                animation: animate 25s linear infinite;
+                bottom: -150px;
+            }
+
+                .circles li:nth-child(1) {
+                    left: 25%;
+                    width: 80px;
+                    height: 80px;
+                    animation-delay: 0s;
+                }
+
+
+                .circles li:nth-child(2) {
+                    left: 10%;
+                    width: 20px;
+                    height: 20px;
+                    animation-delay: 2s;
+                    animation-duration: 12s;
+                }
+
+                .circles li:nth-child(3) {
+                    left: 70%;
+                    width: 20px;
+                    height: 20px;
+                    animation-delay: 4s;
+                }
+
+                .circles li:nth-child(4) {
+                    left: 40%;
+                    width: 60px;
+                    height: 60px;
+                    animation-delay: 0s;
+                    animation-duration: 18s;
+                }
+
+                .circles li:nth-child(5) {
+                    left: 65%;
+                    width: 20px;
+                    height: 20px;
+                    animation-delay: 0s;
+                }
+
+                .circles li:nth-child(6) {
+                    left: 75%;
+                    width: 110px;
+                    height: 110px;
+                    animation-delay: 3s;
+                }
+
+                .circles li:nth-child(7) {
+                    left: 35%;
+                    width: 150px;
+                    height: 150px;
+                    animation-delay: 7s;
+                }
+
+                .circles li:nth-child(8) {
+                    left: 50%;
+                    width: 25px;
+                    height: 25px;
+                    animation-delay: 15s;
+                    animation-duration: 45s;
+                }
+
+                .circles li:nth-child(9) {
+                    left: 20%;
+                    width: 15px;
+                    height: 15px;
+                    animation-delay: 2s;
+                    animation-duration: 35s;
+                }
+
+                .circles li:nth-child(10) {
+                    left: 85%;
+                    width: 150px;
+                    height: 150px;
+                    animation-delay: 0s;
+                    animation-duration: 11s;
+                }
+
+
+
+        @keyframes animate {
+
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+        #EnlargeImageView button.close {
+            position: absolute;
+            right: -0.2rem;
+            top: 0rem;
+            z-index: 999;
+            font-size: 35px;
+            color: #EF5350;
+            opacity: 1;
+        }
+        #EnlargeImageView .modal-body {
+            padding: 0;
+        }
+        .enlarged-image-wrapper img {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 
 <body>
+
+    <div class="splash-wrapper area">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <div class="inner">
+            <h1>ATM Flow Designer</h1>
+            <lottie-player src="https://assets3.lottiefiles.com/datafiles/ZOzFvTrRbMoK2pc/data.json" background="transparent" speed="1.2" style="width: 500px; height: 500px;" mode="bounce" loop autoplay>
+            </lottie-player>
+            <h2>Booting Up <span class="material-symbols-outlined"> settings </span></h2>
+        </div>
+    </div>
 
     <ul class='custom-menu'>
         <!--<li data-action="first"><span class="material-symbols-outlined add-node-icon"> add_box </span> Add</li>-->
@@ -381,7 +624,24 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-primary">Export to File</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" id="EnlargeImageView">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="material-symbols-outlined close-node-details-2">
+                        close
+                    </span>
+                </button>
+                <div class="modal-body">
+                    <div class="enlarged-image-wrapper">
+                        <img id="IMAGE_ID" />
+                    </div>
                 </div>
             </div>
         </div>

@@ -870,6 +870,12 @@ function OnPageLoadTriggerBaseNode(nodeid) {
 
     for (const [key, value] of states.states[nodeid].entries()) {
 
+        if (key == "screen_number") {
+            $("#selectedNodeDetails").append(`
+                <p>View Screen ><span>${value}</span> <span data-id="${value}" title="View Full Screen Image"  class="view-screen material-symbols-outlined"> search </span></p>
+            `)
+        }
+
         if (key == "states_to") {
             for (const [key, values] of value.entries()) {
                 $("#selectedNodeDetails").append(`
@@ -900,11 +906,28 @@ function OnPageLoadTriggerBaseNode(nodeid) {
         OnPageLoadTriggerBaseNode($(this).text());
     })
 
+    $(".view-screen").on("click", function () {
+
+        var ImageID = $(this).data('id');
+
+        $.ajax({
+            url: window.location.href + 'img/screens/' + $(this).data('id') + ".jpg",
+            processData: false,
+            success: function () {
+                $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/' + ImageID + ".jpg");
+            },
+            error: function (r, x) {
+                $("#IMAGE_ID").attr("src", window.location.href + "img/screens/no-image.png");
+            }
+        });
+
+
+        $('#EnlargeImageView').modal('show');
+    })
+
 }
 
 $(document).ready(function () {
-
-    OnPageLoadTriggerBaseNode("000");
 
     graph.on("selectNode", function (params) {
         var selectedNodeId = params.nodes[0];
@@ -913,6 +936,12 @@ $(document).ready(function () {
         $("#selectedNodeDetails").html("");
 
         for (const [key, value] of states.states[selectedNodeId].entries()) {
+
+            if (key == "screen_number") {
+                $("#selectedNodeDetails").append(`
+                    <p>View Screen ><span>${value}</span> <span data-id="${value}" title="View Full Screen Image" class="material-symbols-outlined view-screen"> search </span></p>
+                `)
+            }
 
             if (key == "states_to") {
                 for (const [key, values] of value.entries()) {
@@ -940,6 +969,25 @@ $(document).ready(function () {
         $(".jump-to-state").off("click");
         $(".jump-to-state").on("click", function () {
             OnPageLoadTriggerBaseNode($(this).text());
+        })
+
+        $(".view-screen").on("click", function () {
+
+            var ImageID = $(this).data('id');
+
+            $.ajax({
+                url: window.location.href + 'img/screens/' + $(this).data('id') + ".jpg",
+                processData: false,
+                success: function () {
+                    $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/' + ImageID + ".jpg");
+                },
+                error: function (error) {
+                    $("#IMAGE_ID").attr("src", window.location.href + "img/screens/no-image.png");
+                }
+            });
+
+
+            $('#EnlargeImageView').modal('show');
         })
 
     });
@@ -1016,6 +1064,15 @@ $(document).ready(function () {
         }, 1000)
 
     })    
+
+    setTimeout(function () {
+        $('.splash-wrapper').fadeOut(350);
+        OnPageLoadTriggerBaseNode("000");
+
+        setTimeout(function () {
+            states.delete("000");
+        }, 2000)
+    }, 2000)
 
 })
 
