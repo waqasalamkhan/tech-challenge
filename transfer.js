@@ -3,6 +3,8 @@ import StatesService from "./main.js";
 
 var states = new StatesService();
 var levels = new LevelsService();
+var RawExportedKeys = [];
+var RawExportedData = [];
 
 var DataObj = [
     "000A010010012002002008001002",
@@ -861,7 +863,7 @@ function OnPageLoadTriggerBaseNode(nodeid) {
 
     var node = graph.body.nodes[nodeid];
 
-    graph.focus(nodeid, { animation: true, scale: 0.3 });
+    graph.focus(nodeid, { animation: true, scale: 0.4 });
     graph.selectNodes([nodeid]);
 
     $("#selectedNodeDetails").html("");
@@ -888,7 +890,7 @@ function OnPageLoadTriggerBaseNode(nodeid) {
 
     node.setOptions({
         font: {
-            background: "#2196F3",
+            background: "#1E88E5",
             color: "#fff",
         },
     });
@@ -922,9 +924,7 @@ $(document).ready(function () {
                 $("#selectedNodeDetails").append(`
                     <p>${key.replace(/_/g, ' ')}:<span>${value}</span></p>
                 `)
-            }
-
-            
+            } 
 
         }
 
@@ -932,7 +932,7 @@ $(document).ready(function () {
 
         node.setOptions({
             font: {
-                background: "#2196F3",
+                background: "#1E88E5",
                 color: "#fff",
             },
         });
@@ -964,8 +964,6 @@ $(document).ready(function () {
 
     graph.on("oncontext", function (params) {
 
-        console.log(params);
-
         params.event.preventDefault();
         $(".custom-menu").finish().toggle();
         $(".custom-menu").css({
@@ -981,6 +979,43 @@ $(document).ready(function () {
     $(".close-node-details").on("click", function () {
         $("#selectedNode").fadeOut(50);
     })
+
+    $(".add-new-state-wrapper").on("click", function () {
+        $('#AddNewStateModal').modal('show');
+    })
+
+    $("#exportBtn").on("click", function () {
+
+        $("#exportBtn .material-symbols-outlined").addClass('active');
+
+        for (var key in states.states) {
+            RawExportedKeys.push(key);
+        }
+
+        for (var x = 0; x < RawExportedKeys.sort().length; x++) {
+            RawExportedData.push(states.states[RawExportedKeys.sort()[x]]);
+        }
+
+        $(".exported-file-data-wrapper").html("");
+
+        for (var z = 0; z < RawExportedData.length; z++) {
+            for (let value of RawExportedData[z]) {
+                if (value[0] == "level") {
+                    $(".exported-file-data-wrapper").append("FS<div class='spacer'></div>");
+                } else if (value[0] == "states_to" || value[0] == "description") {
+
+                } else {
+                    $(".exported-file-data-wrapper").append(`<span>${value[1]} </span>`);
+                }
+            }
+        }
+
+        setTimeout(function () {
+            $("#exportBtn .material-symbols-outlined").removeClass('active');
+            $('#ExportedFileDataPreview').modal('show');
+        }, 1000)
+
+    })    
 
 })
 
