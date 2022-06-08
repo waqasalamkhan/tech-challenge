@@ -45,18 +45,18 @@ var DataObj = [
     "065Z278002002002002002002000",
     "{ABNDOYOUWANTRECEIPT",
     "085E085112111255255090090005",
-    "{ABNMAKERECEIPTBUFFERASYESANDSENDTRANSACTIONREQUEST:",
-    "086D090255000000032000000000",
-    "{SENDTRANSACTIONREQUESTCOMMONTOALL",
-    "090I090119001001001001001003",
-    "089I090119001000001001129087",
-    "087Z003000000000000000001000",
-    "084Z001000000000000000001000",
-    "088I090119001001001001129084",
-    "{SendPINValidationRequestToPhoenix",
-    "091I091119001001001001001003{STransactionRequest",
-    "{VARIOUSCLOSESTATE",
-    "092J120000120021120000000000{DTransactionReversed",
+    //"{ABNMAKERECEIPTBUFFERASYESANDSENDTRANSACTIONREQUEST:",
+    //"086D090255000000032000000000",
+    //"{SENDTRANSACTIONREQUESTCOMMONTOALL",
+    //"090I090119001001001001001003",
+    //"089I090119001000001001129087",
+    //"087Z003000000000000000001000",
+    //"084Z001000000000000000001000",
+    //"088I090119001001001001129084",
+    //"{SendPINValidationRequestToPhoenix",
+    //"091I091119001001001001001003{STransactionRequest",
+    //"{VARIOUSCLOSESTATE",
+    //"092J120000120021120000000000{DTransactionReversed",
     //"093J154000154154000000000000{SPINEXHAUSTED:UAECAPTURE",
     //"094J072000072021000000000000{SNormalCash:UAESWClose",
     //"095J117000117021000000000000{SINCOMPLETE:UAESWClose",
@@ -863,6 +863,9 @@ function OnPageLoadTriggerBaseNode(nodeid) {
 
     var node = graph.body.nodes[nodeid];
 
+    $(".edit-node-icon").parent().attr("data-node-id", nodeid);
+    $(".delete-node-icon").parent().attr("data-node-id", nodeid);
+
     graph.focus(nodeid, { animation: true, scale: 0.4 });
     graph.selectNodes([nodeid]);
 
@@ -874,9 +877,7 @@ function OnPageLoadTriggerBaseNode(nodeid) {
             $("#selectedNodeDetails").append(`
                 <p>View Screen ><span>${value}</span> <span data-id="${value}" title="View Full Screen Image"  class="view-screen material-symbols-outlined"> search </span></p>
             `)
-        }
-
-        if (key == "states_to") {
+        } else if (key == "states_to") {
             for (const [key, values] of value.entries()) {
                 $("#selectedNodeDetails").append(`
                         <p>Jump To ><span class="jump-to-state" data-id="${values}">${values}</span></p>
@@ -930,8 +931,12 @@ function OnPageLoadTriggerBaseNode(nodeid) {
 $(document).ready(function () {
 
     graph.on("selectNode", function (params) {
+
         var selectedNodeId = params.nodes[0];
         var node = graph.body.nodes[selectedNodeId];
+
+        $(".edit-node-icon").parent().attr("data-node-id", selectedNodeId);
+        $(".delete-node-icon").parent().attr("data-node-id", selectedNodeId);
 
         $("#selectedNodeDetails").html("");
 
@@ -941,9 +946,7 @@ $(document).ready(function () {
                 $("#selectedNodeDetails").append(`
                     <p>View Screen ><span>${value}</span> <span data-id="${value}" title="View Full Screen Image" class="material-symbols-outlined view-screen"> search </span></p>
                 `)
-            }
-
-            if (key == "states_to") {
+            } else if (key == "states_to") {
                 for (const [key, values] of value.entries()) {
                     $("#selectedNodeDetails").append(`
                         <p>Jump To ><span class="jump-to-state" data-id="${values}">${values}</span></p>
@@ -1018,6 +1021,7 @@ $(document).ready(function () {
             top: params.event.pageY + "px",
             left: params.event.pageX + "px"
         });
+
     });
 
     $("#node-add").on("click", function () {
@@ -1036,9 +1040,17 @@ $(document).ready(function () {
 
         $("#exportBtn .material-symbols-outlined").addClass('active');
 
+        RawExportedKeys = [];
+
         for (var key in states.states) {
-            RawExportedKeys.push(key);
+            if (states.states[key] == undefined || states.states[key] == "undefined") {
+
+            } else {
+                RawExportedKeys.push(key);
+            }
         }
+
+        RawExportedData = [];
 
         for (var x = 0; x < RawExportedKeys.sort().length; x++) {
             RawExportedData.push(states.states[RawExportedKeys.sort()[x]]);
@@ -1066,17 +1078,40 @@ $(document).ready(function () {
     })    
 
     setTimeout(function () {
+
         $('.splash-wrapper').fadeOut(350);
+
         OnPageLoadTriggerBaseNode("000");
 
-        //setTimeout(function () {
-        //    states.delete("000")
-        //    graph.body.data.nodes.remove("000");
-        //}, 500)
-    }, 4000)
+        $("#EditNode").on("click", function () {
+            console.log($(this).attr('data-node-id'));
+        })
+
+        $("#DeleteNode").on("click", function () {
+
+            var NodeID = $(this).attr('data-node-id');
+
+            if (confirm('Are you sure you want to delete this node?')) {
+                states.delete(NodeID)
+                graph.body.data.nodes.remove(NodeID);
+
+            } else {
+                return false;
+            }
+
+        })
+
+        // Detect Enter Key on Jump State Field
+        $('#search-node').keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                OnPageLoadTriggerBaseNode($(event.target).val());
+            }
+        });
+
+    }, 5000)
 
 })
-
 
 //console.log(states.addState("136W100100155100100100100100"));
 

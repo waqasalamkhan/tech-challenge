@@ -295,12 +295,46 @@
                 top: -2px;
                 margin-right: 5px;
             }
-
-        .jump-to-state {
-            color: #1E88E5 !important;
-            text-decoration: underline;
+        .search-state-wrapper {
+            position: fixed;
+            top: 1rem;
+            left: 8rem;
+            background: #1E88E5;
+            color: #212529;
+            padding: 0;
+            border-radius: 5px;
+            vertical-align: middle;
+            font-size: 20px;
             cursor: pointer;
+            transition: all ease-in-out 0.25s;
+            box-shadow: 0 0px 3px 3px rgb(0 0 0 / 5%);
+            z-index: 999;
+            height: 50px;
+            width: 150px;
+
         }
+
+            .search-state-wrapper .material-symbols-outlined {
+                vertical-align: middle;
+                font-size: 25px;
+                margin-left: 5px;
+                color: #fff;
+            }
+            .search-state-wrapper input {
+                border: 0;
+                height: 48px;
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+                width: 70%;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .jump-to-state {
+                color: #1E88E5 !important;
+                text-decoration: underline;
+                cursor: pointer;
+            }
         .view-screen {
             position:relative;
             top: -0.5px;
@@ -543,8 +577,8 @@
 
     <ul class='custom-menu'>
         <!--<li data-action="first"><span class="material-symbols-outlined add-node-icon"> add_box </span> Add</li>-->
-        <li data-action="second"><span class="material-symbols-outlined edit-node-icon"> edit </span> Edit</li>
-        <li data-action="third"><span class="material-symbols-outlined delete-node-icon"> delete </span> Delete</li>
+        <li data-action="second" id="EditNode"><span class="material-symbols-outlined edit-node-icon"> edit </span> Edit</li>
+        <li data-action="third" id="DeleteNode"><span class="material-symbols-outlined delete-node-icon"> delete </span> Delete</li>
     </ul>
     <div id="AddNodeEdge">
         <div class="NodesWrapper">
@@ -573,6 +607,10 @@
     </div>
     <div class="add-new-state-wrapper">
         <span class="material-symbols-outlined add-node-icon"> add_box </span> Add
+    </div>
+    <div class="search-state-wrapper">
+        <input type="text" id="search-node" name="search-node" placeholder="000" maxlength="3" />
+        <span class="material-symbols-outlined add-node-icon"> search </span>
     </div>
     <div id="mynetwork"></div>
     <div id="selectedNode">
