@@ -545,6 +545,7 @@ $(document).ready(function () {
         $(".exported-file-data-wrapper").html("");
 
         for (var z = 0; z < RawExportedData.length; z++) {
+            //console.log(RawExportedData[z]);
             for (let value of RawExportedData[z]) {
                 if (value[0] == "level") {
                     $(".exported-file-data-wrapper").append("FS<div class='spacer'></div>");

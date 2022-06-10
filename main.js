@@ -291,16 +291,22 @@ class StatesService{
         addStateLinks(parsed, ['good_read_next_state']);
         break;
   
-      case 'K':
-        {
-          parsed.set('description', 'FIT Switch state');
-          let states_to = new Set();
-          for(let i = 2; i < 10; i += 1)
-            states_to.add(this.getEntry(data, i));
-          
-          parsed.set('states_to', states_to);
-        }
-        break;
+          case 'K':
+              //console.log(data);
+              //console.log(data.substring(0, 3));
+              //console.log(this.getEntry(data, 9));
+
+              parsed.set('description', 'FIT Switch');
+
+              parsed.set('next_state1', this.getEntry(data, 3));
+              parsed.set('next_state2', this.getEntry(data, 4));
+              parsed.set('next_state3', this.getEntry(data, 5));
+              parsed.set('next_state4', this.getEntry(data, 6));
+              parsed.set('next_state5', this.getEntry(data, 8));
+              parsed.set('next_state6', this.getEntry(data, 9));
+
+              addStateLinks(parsed, ['next_state1', 'next_state2', 'next_state3', 'next_state4', 'next_state5', 'next_state6']);
+              break;
   
       case 'm':
         parsed.set('description', 'PIN & Language Select State');
