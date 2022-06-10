@@ -5,6 +5,7 @@ var states = new StatesService();
 var levels = new LevelsService();
 var RawExportedKeys = [];
 var RawExportedData = [];
+var TempArray = [];
 
 var DataObj = [
     "000 A 073 000 065 255 255 118 255 000 FS",
@@ -130,6 +131,7 @@ var DataObj = [
     "302 / 007 000 000 000 000 000 000 000 FS",
     "303 , 007 301 006 000 000 000 000 000 FS",
     "304 ? 000 000 000 000 000 000 000 000 FS"
+
 ]
 
 var SanitizedObj = [];
@@ -138,8 +140,10 @@ for (var x = 0; x < DataObj.length; x++) {
     SanitizedObj.push(TempHolder.replace("FS", ""));
 }
 
+//console.log(SanitizedObj.length);
+
 for (var y = 0; y < SanitizedObj.length; y++) {
-    states.addState(SanitizedObj[y]);
+    states.addStateString(SanitizedObj[y]);
 }
 
 const options = {
@@ -151,13 +155,13 @@ const options = {
         }
     },
     layout: {
-        improvedLayout: true,
+        improvedLayout: false,
         clusterThreshold: 50,
         hierarchical: {
             enabled: true,
-            levelSeparation: 150,
-            nodeSpacing: 150,
-            treeSpacing: 150,
+            levelSeparation: 200,
+            nodeSpacing: 200,
+            treeSpacing: 200,
             blockShifting: false,
             edgeMinimization: true,
             parentCentralization: true,
@@ -166,7 +170,12 @@ const options = {
             shakeTowards: 'roots'  // roots, leaves
         }
     },
-    physics: false,
+    physics: {
+        barnesHut: {
+            springConstant: 0,
+            avoidOverlap: 0.2
+        }
+    } ,
     groups: {
         useDefaultGroups: true,
     },
@@ -185,18 +194,18 @@ const options = {
             autoFocus: true,
         },
         multiselect: false,
-        navigationButtons: false,
+        navigationButtons: true,
         selectable: true,
         selectConnectedEdges: true,
         tooltipDelay: 300,
         zoomSpeed: 3,
         zoomView: true
     },
-    physics: false,
 
 };
 
-let nodes = states.getNodes();
+let nodes = new vis.DataSet(states.getNodes());
+
 nodes.forEach(node => {
     node['size'] = 160;
 
@@ -214,13 +223,13 @@ nodes.forEach(node => {
     }
 
     node['shape'] = 'box';
-    node['font'] = { 'size': '32', 'face': 'monospace', 'align': 'center' };
-    node['heightConstraint'] = { minimum: 100 };
-    node['widthConstraint'] = { minimum: 100 };
+    node['font'] = { 'size': '40', 'face': 'monospace', 'align': 'center' };
+    node['heightConstraint'] = { minimum: 130 };
+    node['widthConstraint'] = { minimum: 130 };
     node['choosen'] = "true";
 });
 
-let edges = states.getEdges();
+let edges = new vis.DataSet(states.getEdges());
 edges.forEach(edge => {
     edge['arrows'] = 'to';
     edge['physics'] = false;
@@ -317,18 +326,21 @@ function removeEdge() {
 
 function OnPageLoadTriggerBaseNode(nodeid) {
 
+    $("#selectedNodeDetails p .selectedStateDetailsInput").addClass("disabled").removeClass("editable").prop("disabled", true);
+    $("#selectedNode #saveEditBtn").hide();
+
     var node = graph.body.nodes[nodeid];
 
     $(".edit-node-icon").parent().attr("data-node-id", nodeid);
     $(".delete-node-icon").parent().attr("data-node-id", nodeid);
 
-    //if (states.getNodes().length > 30) {
-    //    graph.focus(nodeid, { animation: false, scale: 0.4 });
-    //} else {
-    //    graph.focus(nodeid, { animation: true, scale: 0.4 });
-    //}
+    if (states.getNodes().length > 150) {
+        graph.focus(nodeid, { animation: false, scale: 0.4 });
+    } else {
+        graph.focus(nodeid, { animation: true, scale: 0.4 });
+    }
 
-    graph.focus(nodeid, { animation: true, scale: 0.4 });
+    //graph.focus(nodeid, { animation: true, scale: 0.4 });
     
     graph.selectNodes([nodeid]);
 
@@ -338,21 +350,20 @@ function OnPageLoadTriggerBaseNode(nodeid) {
 
         if (key == "screen_number") {
             $("#selectedNodeDetails").append(`
-                <p>View Screen ><span>${value}</span> <span data-id="${value}" title="View Full Screen Image"  class="view-screen material-symbols-outlined"> search </span></p>
+                <p>View Screen > <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /> <span data-id="${value}" title="View Full Screen Image" class="view-screen material-symbols-outlined"> search </span></p>
             `)
         } else if (key == "states_to") {
             for (const [key, values] of value.entries()) {
                 $("#selectedNodeDetails").append(`
-                        <p>Jump To ><span class="jump-to-state" data-id="${values}">${values}</span></p>
+                        <p>Next State: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${values}" /><span data-id="${values}" title="Jump to Next State" class="jump-to-state material-symbols-outlined"> call_missed_outgoing </span></p>
+                    
                     `)
             }
         } else {
             $("#selectedNodeDetails").append(`
-                    <p>${key.replace(/_/g, ' ')}:<span>${value}</span></p>
-                `)
+                <p>${key.replace(/_/g, ' ')}: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /></p>
+            `)
         }
-
-
 
     }
 
@@ -367,7 +378,7 @@ function OnPageLoadTriggerBaseNode(nodeid) {
 
     $(".jump-to-state").off("click");
     $(".jump-to-state").on("click", function () {
-        OnPageLoadTriggerBaseNode($(this).text());
+        OnPageLoadTriggerBaseNode($(this).attr('data-id'));
     })
 
     $(".view-screen").on("click", function () {
@@ -375,10 +386,10 @@ function OnPageLoadTriggerBaseNode(nodeid) {
         var ImageID = $(this).data('id');
 
         $.ajax({
-            url: window.location.href + 'img/screens/' + $(this).data('id') + ".jpg",
+            url: window.location.href + 'img/screens/PIC' + $(this).data('id') + ".jpg",
             processData: false,
             success: function () {
-                $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/' + ImageID + ".jpg");
+                $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/PIC' + ImageID + ".jpg");
             },
             error: function (r, x) {
                 $("#IMAGE_ID").attr("src", window.location.href + "img/screens/no-image.png");
@@ -395,6 +406,9 @@ $(document).ready(function () {
 
     graph.on("selectNode", function (params) {
 
+        $("#selectedNodeDetails p .selectedStateDetailsInput").addClass("disabled").removeClass("editable").prop("disabled", true);
+        $("#selectedNode #saveEditBtn").hide();
+
         var selectedNodeId = params.nodes[0];
         var node = graph.body.nodes[selectedNodeId];
 
@@ -407,19 +421,20 @@ $(document).ready(function () {
 
             if (key == "screen_number") {
                 $("#selectedNodeDetails").append(`
-                    <p>View Screen ><span>${value}</span> <span data-id="${value}" title="View Full Screen Image" class="material-symbols-outlined view-screen"> search </span></p>
-                `)
+                <p>View Screen > <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /> <span data-id="${value}" title="View Full Screen Image" class="view-screen material-symbols-outlined"> search </span></p>
+            `)
             } else if (key == "states_to") {
                 for (const [key, values] of value.entries()) {
                     $("#selectedNodeDetails").append(`
-                        <p>Jump To ><span class="jump-to-state" data-id="${values}">${values}</span></p>
+                        <p>Next State: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${values}" /><span data-id="${values}" title="Jump to Next State" class="jump-to-state material-symbols-outlined"> call_missed_outgoing </span></p>
+                    
                     `)
                 }
             } else {
                 $("#selectedNodeDetails").append(`
-                    <p>${key.replace(/_/g, ' ')}:<span>${value}</span></p>
-                `)
-            } 
+                <p>${key.replace(/_/g, ' ')}: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /></p>
+            `)
+            }
 
         }
 
@@ -434,7 +449,7 @@ $(document).ready(function () {
 
         $(".jump-to-state").off("click");
         $(".jump-to-state").on("click", function () {
-            OnPageLoadTriggerBaseNode($(this).text());
+            OnPageLoadTriggerBaseNode($(this).attr('data-id'));
         })
 
         $(".view-screen").on("click", function () {
@@ -459,6 +474,12 @@ $(document).ready(function () {
     });
 
     graph.on("deselectNode", function (params) {
+
+        $("#selectedNodeDetails p .selectedStateDetailsInput").addClass("disabled").removeClass("editable").prop("disabled", true);
+        $("#selectedNode #saveEditBtn").hide();
+
+        $(".custom-menu").hide();
+
         var deselectedNodeId = params.previousSelection.nodes[0];
         var node = graph.body.nodes[deselectedNodeId];
 
@@ -479,7 +500,7 @@ $(document).ready(function () {
     graph.on("oncontext", function (params) {
 
         params.event.preventDefault();
-        $(".custom-menu").finish().toggle();
+        $(".custom-menu").toggle();
         $(".custom-menu").css({
             top: params.event.pageY + "px",
             left: params.event.pageX + "px"
@@ -501,7 +522,7 @@ $(document).ready(function () {
 
     $("#exportBtn").on("click", function () {
 
-        console.log(states.states);
+        //console.log(states.states);
 
         $("#exportBtn .material-symbols-outlined").addClass('active');
 
@@ -530,7 +551,7 @@ $(document).ready(function () {
                 } else if (value[0] == "states_to" || value[0] == "description") {
 
                 } else {
-                    $(".exported-file-data-wrapper").append(`<span>${value[1]}</span>`);
+                    $(".exported-file-data-wrapper").append(`<span>${value[1]} </span>`);
                 }
             }
         }
@@ -540,7 +561,72 @@ $(document).ready(function () {
             $('#ExportedFileDataPreview').modal('show');
         }, 1000)
 
-    })    
+    })   
+
+    $("#saveEditBtn").on("click", function () {
+
+        var TempVar = "";
+
+        var AllInputs = $("#selectedNodeDetails input");
+
+        for (var x = 1; x < AllInputs.length - 1; x++) {
+            TempVar += AllInputs[x].value
+        }
+
+        if (AllInputs[1].value == "000") {
+            alert("Cannot edit base node");
+            return;
+        } else {
+
+            if (confirm('Are you sure you want to edit this node?')) {
+
+                states.delete(AllInputs[1].value)
+                graph.body.data.nodes.remove(AllInputs[1].value);
+
+                states.addStateString(TempVar);
+
+                nodes.add({
+                    id: AllInputs[1].value,
+                    label: AllInputs[1].value + " " + AllInputs[2].value,
+                    level: 4,
+                    shape: 'box',
+                    font: { 'size': '40', 'face': 'monospace', 'align': 'center' },
+                    heightConstraint: { minimum: 130 },
+                    widthConstraint: { minimum: 130 },
+                    choosen: "true"
+                });
+
+                var Edges = states.get(AllInputs[1].value);
+
+                for (const [key, value] of Edges.entries()) {
+                    if (key == "states_to") {
+                        for (const [key2] of value.entries()) {
+
+                            edges.add({
+                                id: key2,
+                                from: AllInputs[1].value,
+                                to: key2,
+                                arrows: 'to',
+                                physics: false,
+                                smooth: { 'type': 'cubicBezier' }
+                            });
+                        }
+                    }
+                }
+
+                $("#selectedNodeDetails p .selectedStateDetailsInput").addClass("disabled").removeClass("editable").prop("disabled", true);
+                $("#selectedNode #saveEditBtn").hide();
+                $("#selectedNode").fadeOut(50);
+
+                OnPageLoadTriggerBaseNode(AllInputs[1].value);
+
+            } else {
+                return false;
+            }
+
+        }
+
+    })
 
     setTimeout(function () {
 
@@ -549,7 +635,9 @@ $(document).ready(function () {
         OnPageLoadTriggerBaseNode("000");
 
         $("#EditNode").on("click", function () {
-            console.log($(this).attr('data-node-id'));
+            $("#selectedNodeDetails p .selectedStateDetailsInput").removeClass("disabled").addClass("editable").prop("disabled", false);
+            $("#selectedNode #saveEditBtn").show();
+            //console.log($(this).attr('data-node-id'));
         })
 
         $("#DeleteNode").on("click", function () {
@@ -559,6 +647,7 @@ $(document).ready(function () {
             if (confirm('Are you sure you want to delete this node?')) {
                 states.delete(NodeID)
                 graph.body.data.nodes.remove(NodeID);
+                $("#selectedNode").fadeOut(50);
 
             } else {
                 return false;

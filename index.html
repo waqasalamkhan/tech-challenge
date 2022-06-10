@@ -81,11 +81,34 @@
                 text-transform: capitalize;
             }
 
-            #selectedNodeDetails span {
-                color: rgba(0,0,0,1);
-                margin-left: 5px;
-                font-weight: 600;
-            }
+                #selectedNodeDetails p .selectedStateDetailsInput {
+                    width: 29px;
+                    text-align: left;
+                    margin-left: 0px;
+                    border: 0;
+                    border-radius: 2px;
+                    font-weight: 600;
+                }
+                    #selectedNodeDetails p .selectedStateDetailsInput.disabled {
+                        background: none;
+                    }
+                    #selectedNodeDetails p .selectedStateDetailsInput.editable {
+                        border: 1px solid #ccc;
+                    }
+                    #selectedNodeDetails p:first-child .selectedStateDetailsInput {
+                       width: auto;
+                    }
+                    #selectedNodeDetails p:nth-child(3) .selectedStateDetailsInput {
+                        border: 0;
+                        pointer-events: none;
+                    }
+                    
+
+                    #selectedNodeDetails span {
+                        color: rgba(0,0,0,1);
+                        margin-left: 5px;
+                        font-weight: 600;
+                    }
                 #selectedNodeDetails span.material-symbols-outlined {
                     font-size: 16px;
                     vertical-align: middle;
@@ -122,6 +145,37 @@
                 top: -1px;
                 font-size: 20px;
             }
+
+        #selectedNode #saveEditBtn {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            text-align: center;
+            background: #8BC34A;
+            color: #fff;
+            height: 40px;
+            line-height: 40px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: sans-serif;
+            width: 85%;
+            float: none;
+            margin: 0 auto;
+            margin-bottom: 70px;
+        }
+
+            #selectedNode #saveEditBtn .material-symbols-outlined {
+                vertical-align: middle;
+                margin-left: 5px;
+                position: relative;
+                top: -1px;
+                font-size: 20px;
+            }
+
+            
 
                 #selectedNode #exportBtn .material-symbols-outlined.active {
                     -webkit-animation: rotation 2s infinite linear;
@@ -332,7 +386,6 @@
 
             .jump-to-state {
                 color: #1E88E5 !important;
-                text-decoration: underline;
                 cursor: pointer;
             }
         .view-screen {
@@ -620,6 +673,9 @@
         <h2>Selected State Details</h2>
         <div id="selectedNodeDetails">
             <p>Please select a state to get details</p>
+        </div>
+        <div id="saveEditBtn" style="display: none;">
+            Save Changes <span class="material-symbols-outlined"> done_all </span>
         </div>
         <div id="exportBtn">
             Generate States File <span class="material-symbols-outlined"> settings </span>

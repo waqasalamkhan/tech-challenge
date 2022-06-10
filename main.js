@@ -732,8 +732,9 @@ class StatesService{
       for ( let i in this.states){
         let node = {};
         let state = this.states[i];
-  
-        if( state.get('level') !== null && state.get('type') !== 'Z'){
+
+        //if (state.get('level') !== null && state.get('type') !== 'Z') { This was the line before on line # 737
+        if( state.get('level') !== null){
           node.id = state.get('number');
           node.label = state.get('number') + ' ' + state.get('type');
   
