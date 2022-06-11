@@ -6,6 +6,7 @@ var levels = new LevelsService();
 var RawExportedKeys = [];
 var RawExportedData = [];
 var TempArray = [];
+var reader = new TxtReader();
 
 var DataObj = [
     "000 A 073 000 065 255 255 118 255 000 FS",
@@ -131,7 +132,6 @@ var DataObj = [
     "302 / 007 000 000 000 000 000 000 000 FS",
     "303 , 007 301 006 000 000 000 000 000 FS",
     "304 ? 000 000 000 000 000 000 000 000 FS"
-
 ]
 
 var SanitizedObj = [];
@@ -350,18 +350,21 @@ function OnPageLoadTriggerBaseNode(nodeid) {
 
         if (key == "screen_number") {
             $("#selectedNodeDetails").append(`
-                <p>View Screen > <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /> <span data-id="${value}" title="View Full Screen Image" class="view-screen material-symbols-outlined"> search </span></p>
+                <p id="${value}">View Screen > <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /> <span data-id="${value}" title="View Full Screen Image" class="view-screen material-symbols-outlined"> search </span></p>
             `)
         } else if (key == "states_to") {
             for (const [key, values] of value.entries()) {
-                $("#selectedNodeDetails").append(`
-                        <p>Next State: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${values}" /><span data-id="${values}" title="Jump to Next State" class="jump-to-state material-symbols-outlined"> call_missed_outgoing </span></p>
+
+                //$("#selectedNodeDetails").append(`
+                //    <p id="${value}">Next State: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${values}" /><span data-id="${values}" title="Jump to Next State" class="jump-to-state material-symbols-outlined"> call_missed_outgoing </span></p>
                     
-                    `)
+                //`)
+                $("#selectedNodeDetails #" + values).append(`<span data-id="${values}" title="Jump to Next State" class="jump-to-state material-symbols-outlined"> call_missed_outgoing </span>`)
             }
         } else {
+
             $("#selectedNodeDetails").append(`
-                <p>${key.replace(/_/g, ' ')}: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /></p>
+                <p id="${value}">${key.replace(/_/g, ' ')}: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /></p>
             `)
         }
 
@@ -421,18 +424,21 @@ $(document).ready(function () {
 
             if (key == "screen_number") {
                 $("#selectedNodeDetails").append(`
-                <p>View Screen > <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /> <span data-id="${value}" title="View Full Screen Image" class="view-screen material-symbols-outlined"> search </span></p>
+                <p id="${value}">View Screen > <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /> <span data-id="${value}" title="View Full Screen Image" class="view-screen material-symbols-outlined"> search </span></p>
             `)
             } else if (key == "states_to") {
                 for (const [key, values] of value.entries()) {
-                    $("#selectedNodeDetails").append(`
-                        <p>Next State: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${values}" /><span data-id="${values}" title="Jump to Next State" class="jump-to-state material-symbols-outlined"> call_missed_outgoing </span></p>
+
+                    //$("#selectedNodeDetails").append(`
+                    //    <p>Next State: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${values}" /><span data-id="${values}" title="Jump to Next State" class="jump-to-state material-symbols-outlined"> call_missed_outgoing </span></p>
                     
-                    `)
+                    //`)
+
+                    $("#selectedNodeDetails #" + values).append(`<span data-id="${values}" title="Jump to Next State" class="jump-to-state material-symbols-outlined"> call_missed_outgoing </span>`)
                 }
             } else {
                 $("#selectedNodeDetails").append(`
-                <p>${key.replace(/_/g, ' ')}: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /></p>
+                <p id="${value}">${key.replace(/_/g, ' ')}: <input disabled class="disabled selectedStateDetailsInput" type="text" value="${value}" /></p>
             `)
             }
 
@@ -545,8 +551,9 @@ $(document).ready(function () {
         $(".exported-file-data-wrapper").html("");
 
         for (var z = 0; z < RawExportedData.length; z++) {
-            //console.log(RawExportedData[z]);
+
             for (let value of RawExportedData[z]) {
+
                 if (value[0] == "level") {
                     $(".exported-file-data-wrapper").append("FS<div class='spacer'></div>");
                 } else if (value[0] == "states_to" || value[0] == "description") {
@@ -554,7 +561,9 @@ $(document).ready(function () {
                 } else {
                     $(".exported-file-data-wrapper").append(`<span>${value[1]} </span>`);
                 }
+
             }
+
         }
 
         setTimeout(function () {
@@ -626,6 +635,62 @@ $(document).ready(function () {
             }
 
         }
+
+    })
+
+    $('.file-upload-btn').on("click", function () {
+        $("#formFile").trigger("click");
+    })
+
+    $("#formFile").on("change", function () {
+        var file = document.getElementById('formFile').files[0];
+        $(".progress").removeClass("invisible");
+
+        reader.loadFile(file)
+            .progress(function (progress) {
+
+                $(".progress .progress-text").text("Loading Data: " + progress + "%");
+                $(".progress .progress-bar").css("width", progress + "%");
+                //console.log('Loading file progress: ' + progress + '%');
+
+            })
+            .then(function (linesCount) {
+                //console.log('Loading file completed in ' + response.timeTaken + 'ms, total lines: ' + response.result.lineCount);
+
+                reader.getLines(1, linesCount)
+                    .progress(function (progress) {
+
+                        //console.log('Getting lines progress: ' + progress + '%');
+                        $(".progress .progress-text").text("Reading Data: " + progress + '%');
+                        $(".progress .progress-bar").css("width", progress + "%");
+
+                    })
+                    .then(function (response) {
+
+                        //console.log(response.result);
+
+                        setTimeout(function () {
+                            $(".progress .progress-text").html("<span class='material-symbols-outlined'>settings</span>Rendering Nodes");
+
+                            setTimeout(function () {
+                                //console.log(response.result);
+                                $("#FileUploadArea").fadeOut();
+                                $("#NetWorkAreaWrapper").fadeIn();
+
+                                OnPageLoadTriggerBaseNode("000");
+                            }, 500)
+
+                        }, 500)
+
+                    })
+                    .catch(function (reason) {
+                        console.log('Getting lines failed with error: ' + reason);
+                    });
+
+            })
+            .catch(function (reason) {
+                console.log('Loading file failed with error: ' + reason);
+            });
 
     })
 

@@ -179,6 +179,7 @@ class StatesService{
           'B_preset_mask',
           'C_preset_mask',
           'D_preset_mask',
+          'reserved',
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
@@ -227,6 +228,7 @@ class StatesService{
           'decimal_places',
           'currency_type',
           'amount_check_condition',
+          'reserved',
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
@@ -272,6 +274,7 @@ class StatesService{
           'no_receipt_delivered_screen',
           'card_retained_screen_number',
           'statement_delivered_screen_number',
+          'reserved',
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
@@ -292,21 +295,21 @@ class StatesService{
         break;
   
           case 'K':
-              //console.log(data);
-              //console.log(data.substring(0, 3));
-              //console.log(this.getEntry(data, 9));
 
+              console.log(data);
               parsed.set('description', 'FIT Switch');
 
-              parsed.set('next_state1', this.getEntry(data, 3));
-              parsed.set('next_state2', this.getEntry(data, 4));
-              parsed.set('next_state3', this.getEntry(data, 5));
-              parsed.set('next_state4', this.getEntry(data, 6));
-              parsed.set('next_state5', this.getEntry(data, 8));
-              parsed.set('next_state6', this.getEntry(data, 9));
+            parsed.set('next_state1', this.getEntry(data, 2));
+            parsed.set('next_state2', this.getEntry(data, 3));
+            parsed.set('next_state3', this.getEntry(data, 4));
+            parsed.set('next_state4', this.getEntry(data, 5));
+            parsed.set('next_state5', this.getEntry(data, 6));
+            parsed.set('next_state6', this.getEntry(data, 7));
+            parsed.set('next_state7', this.getEntry(data, 8));
+            parsed.set('next_state8', this.getEntry(data, 9));
 
-              addStateLinks(parsed, ['next_state1', 'next_state2', 'next_state3', 'next_state4', 'next_state5', 'next_state6']);
-              break;
+              addStateLinks(parsed, ['next_state1', 'next_state2', 'next_state3', 'next_state4', 'next_state5', 'next_state6', 'next_state7', 'next_state8']);
+        break;
   
       case 'm':
         parsed.set('description', 'PIN & Language Select State');
@@ -387,14 +390,17 @@ class StatesService{
          * Accessing Z state entries may be perfromed by state.entries[i] - to get i-th table entry as it's written in NDC's spec. 
          * E.g. state.entries[1] is 'Z', state.entry[4] is "Z state table entry 4"
          */
-        {
-          parsed.set('description', 'Extension state');
-          let entries = [null, 'Z'];
-          for(let i = 2; i < 10; i++)
-            entries.push(this.getEntry(data, i));
-          parsed.set('entries', entries);
-        }
-        break;
+              parsed.set('description', 'Extension State');
+
+              parsed.set('buffer_id1', this.getEntry(data, 3));
+              parsed.set('buffer_id2', this.getEntry(data, 4));
+              parsed.set('buffer_id1_greater_buffer_id2_next_num', this.getEntry(data, 5));
+              parsed.set('buffer_id1_lesser_buffer_id2_next_num', this.getEntry(data, 6));
+              parsed.set('reserved1', this.getEntry(data, 8));
+              parsed.set('reserved2', this.getEntry(data, 9));
+
+              addStateLinks(parsed, ['buffer_id1_greater_buffer_id2_next_num', 'buffer_id1_lesser_buffer_id2_next_num']);
+              break;
   
       case '>':
         parsed.set('description', 'Cash deposit state');

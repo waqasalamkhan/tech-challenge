@@ -14,6 +14,8 @@
 
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
+    <script type="text/javascript" src="lib/txt-reader.min.js"></script>
+
     <style type="text/css">
 
         @keyframes rotation {
@@ -26,6 +28,10 @@
             }
         }
 
+        body {
+            background: url("img/bg-square.png") center center fixed;
+        }
+
         * {
             font-family: 'Open Sans', sans-serif;
             transition: all ease-in-out .15s;
@@ -35,23 +41,30 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
         }
 
+        #NetWorkAreaWrapper {
+            display: none;
+        }
+
+        #FileUploadArea {
+            
+        }
+
         #mynetwork {
             width: 100%;
             height: 99%;
             border: 1px solid lightgray;
             display: inline-block;
             vertical-align: top;
-            background: url("img/bg-square.png") center center fixed;
         }
 
         #selectedNode {
-            border: 1px solid lightgray;
+            border: 2px dashed #1D88E5;
             font-family: monospace;
             position: fixed;
             right: 2rem;
             top: 50%;
             transform: translateY(-50%);
-            z-index: 9999;
+            z-index: 999;
             background: #fff;
             border-radius: 5px;
             box-shadow: 0 0px 5px 5px rgb(0 0 0 / 5%);
@@ -73,6 +86,12 @@
             overflow: auto;
         }
 
+            #selectedNodeDetails .ZTypeData {
+                width: auto;
+                float: left;
+                margin-right: 5px;
+            }
+
             #selectedNodeDetails p {
                 color: rgba(0,0,0,0.6);
                 margin: 0 0 10px 0;
@@ -89,26 +108,31 @@
                     border-radius: 2px;
                     font-weight: 600;
                 }
+
                     #selectedNodeDetails p .selectedStateDetailsInput.disabled {
                         background: none;
                     }
+
                     #selectedNodeDetails p .selectedStateDetailsInput.editable {
                         border: 1px solid #ccc;
                     }
-                    #selectedNodeDetails p:first-child .selectedStateDetailsInput {
-                       width: auto;
-                    }
-                    #selectedNodeDetails p:nth-child(3) .selectedStateDetailsInput {
-                        border: 0;
-                        pointer-events: none;
-                    }
-                    
 
-                    #selectedNodeDetails span {
-                        color: rgba(0,0,0,1);
-                        margin-left: 5px;
-                        font-weight: 600;
-                    }
+                #selectedNodeDetails p:first-child .selectedStateDetailsInput {
+                    width: auto;
+                }
+
+                #selectedNodeDetails p:nth-child(3) .selectedStateDetailsInput {
+                    border: 0;
+                    pointer-events: none;
+                }
+
+
+            #selectedNodeDetails span {
+                color: rgba(0,0,0,1);
+                margin-left: 5px;
+                font-weight: 600;
+            }
+
                 #selectedNodeDetails span.material-symbols-outlined {
                     font-size: 16px;
                     vertical-align: middle;
@@ -117,26 +141,26 @@
                     cursor: pointer;
                 }
 
-                #selectedNode #exportBtn {
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    margin: 0 auto;
-                    text-align: center;
-                    background: #1E88E5;
-                    color: #fff;
-                    height: 40px;
-                    line-height: 40px;
-                    margin: 5px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-family: sans-serif;
-                    width: 85%;
-                    float: none;
-                    margin: 0 auto;
-                    margin-bottom: 20px;
-                }
+        #selectedNode #exportBtn {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            text-align: center;
+            background: #1E88E5;
+            color: #fff;
+            height: 40px;
+            line-height: 40px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: sans-serif;
+            width: 85%;
+            float: none;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
 
             #selectedNode #exportBtn .material-symbols-outlined {
                 vertical-align: middle;
@@ -175,12 +199,12 @@
                 font-size: 20px;
             }
 
-            
 
-                #selectedNode #exportBtn .material-symbols-outlined.active {
-                    -webkit-animation: rotation 2s infinite linear;
-                    animation: rotation 2s infinite linear;
-                }
+
+        #selectedNode #exportBtn .material-symbols-outlined.active {
+            -webkit-animation: rotation 2s infinite linear;
+            animation: rotation 2s infinite linear;
+        }
 
         #AddNodeEdge {
             margin: 0 0 5px 0;
@@ -262,6 +286,7 @@
             padding: 5px;
             color: #fff;
         }
+
         .close-node-details-2 {
             cursor: pointer;
             position: absolute;
@@ -349,6 +374,7 @@
                 top: -2px;
                 margin-right: 5px;
             }
+
         .search-state-wrapper {
             position: fixed;
             top: 1rem;
@@ -365,31 +391,85 @@
             z-index: 999;
             height: 50px;
             width: 150px;
-
         }
 
-            .search-state-wrapper .material-symbols-outlined {
-                vertical-align: middle;
-                font-size: 25px;
-                margin-left: 5px;
-                color: #fff;
-            }
-            .search-state-wrapper input {
-                border: 0;
-                height: 48px;
-                border-top-left-radius: 5px;
-                border-bottom-left-radius: 5px;
-                width: 70%;
-                padding-left: 15px;
-                padding-right: 15px;
+        .navigation-wrapper {
+            position: fixed;
+            top: 1rem;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            padding: 0;
+            border-radius: 0;
+            vertical-align: middle;
+            font-size: 20px;
+            z-index: 999;
+            height: 51px;
+            line-height: 50px;
+            background: rgba(255,255,255,1);
+            border: 1px solid #eee;
+            border-radius: 5px;
+            max-width: 365px;
+            box-shadow: 0 0px 3px 3px rgb(0 0 0 / 3%);
+            transition: all ease-in-out 0.25s;
+            z-index: 999;
+        }
+
+            .navigation-wrapper ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
             }
 
-            .jump-to-state {
-                color: #1E88E5 !important;
-                cursor: pointer;
-            }
+                .navigation-wrapper ul li {
+                    float: left;
+                    border-right: 1px solid #eee;
+                }
+
+                    .navigation-wrapper ul li:last-child {
+                        border-right: 0;
+                    }
+
+                    .navigation-wrapper ul li a {
+                        font-size: 18px;
+                        color: #212529;
+                        padding: 0 20px;
+                        height: 49px;
+                        line-height: 49px;
+                        display: inline-block;
+                        vertical-align: top;
+                    }
+
+                        .navigation-wrapper ul li a.active {
+                            font-size: 18px;
+                            color: #fff;
+                            background: #1E88E5;
+                        }
+
+        .search-state-wrapper .material-symbols-outlined {
+            vertical-align: middle;
+            font-size: 25px;
+            margin-left: 5px;
+            color: #fff;
+        }
+
+        .search-state-wrapper input {
+            border: 0;
+            height: 48px;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            width: 70%;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .jump-to-state {
+            color: #1E88E5 !important;
+            cursor: pointer;
+        }
+
         .view-screen {
-            position:relative;
+            position: relative;
             top: -0.5px;
             /*color: #1E88E5 !important;
             text-decoration: underline;
@@ -432,7 +512,7 @@
                 background: #fff;
                 border-radius: 7px;
                 padding: 1rem;
-                box-shadow: 0 0px 5px 5px rgb(0 0 0 / 5%);
+                box-shadow: 0px 0px 7px 15px rgb(0 0 0 / 10%);
             }
 
             .splash-wrapper h1 {
@@ -459,16 +539,17 @@
                 font-weight: 400;
                 color: #afafaf;
             }
+
                 .splash-wrapper h2 .material-symbols-outlined {
                     vertical-align: middle;
-                    position:relative;
+                    position: relative;
                     top: -1px;
                     -webkit-animation: rotation 2s infinite linear;
                     animation: rotation 2s infinite linear;
                 }
 
         .area {
-            background: #EEE;
+            background: #1E88E5;
             /*background: -webkit-linear-gradient(to left, #EEE, #1E88E5);*/
             width: 100%;
             height: 100vh;
@@ -586,6 +667,7 @@
                 border-radius: 50%;
             }
         }
+
         #EnlargeImageView button.close {
             position: absolute;
             right: -0.2rem;
@@ -595,13 +677,190 @@
             color: #EF5350;
             opacity: 1;
         }
+
         #EnlargeImageView .modal-body {
-            padding: 0;
+            padding: 2rem 0;
         }
+
+        #EnlargeImageView .modal-content {
+            background: none;
+            border: 0;
+        }
+
+        #EnlargeImageView .enlarged-image-wrapper {
+           text-align:center;
+           position:relative;
+        }
+
         .enlarged-image-wrapper img {
-            width: 100%;
-            height: 100%;
+            width: 500px;
         }
+
+        .enlarged-image-wrapper div {
+            position: absolute;
+            width: 150px;
+            height: 50px;
+            background: #FFF176;
+            color: #fff;
+        }
+
+        .enlarged-image-wrapper .btnA {
+            right: 0;
+            top: 2rem;
+        }
+        .enlarged-image-wrapper .btnB {
+            right: 0;
+            top: 32%;
+        }
+        .enlarged-image-wrapper .btnC {
+            right: 0;
+            bottom: 32%;
+        }
+        .enlarged-image-wrapper .btnD {
+            right: 0;
+            bottom: 2rem;
+        }
+        .enlarged-image-wrapper .btnI {
+            left: 0;
+            top: 2rem;
+        }
+        .enlarged-image-wrapper .btnG {
+            left: 0;
+            top: 32%;
+        }
+        .enlarged-image-wrapper .btnH {
+            left: 0;
+            bottom: 32%;
+        }
+        .enlarged-image-wrapper .btnF {
+            left: 0;
+            bottom: 2rem;
+        }
+
+        .read-a-file-area {
+            text-align: center;
+            position: relative;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            z-index: 9999;
+        }
+
+            .read-a-file-area .file-area {
+                position: relative;
+            }
+
+                .read-a-file-area .file-area .form-control {
+                    width: 300px;
+                    margin: 2.5rem auto;
+                }
+
+                .read-a-file-area .file-area .file-upload-btn {
+                    position: absolute;
+                    top: 50%;
+                    -webkit-transform: translateY(-50%);
+                    transform: translateY(-50%);
+                    width: 300px;
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    background: #222;
+                    border-radius: 4px;
+                    height: 50px;
+                    font-size: 16px;
+                    line-height: 50px;
+                    color: #fff;
+                    cursor: pointer;
+                }
+
+                .read-a-file-area .file-area .progress {
+                    width: 300px;
+                    /* margin: 1rem auto; */
+                    position: absolute;
+                    top: 50%;
+                    -webkit-transform: translateY(-50%);
+                    transform: translateY(-50%);
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    height: 50px;
+                    z-index: 100;
+                    border-radius: 4px;
+                }
+
+                    .read-a-file-area .file-area .progress .progress-bar {
+                        background-color: #2765c7;
+                    }
+
+                    .read-a-file-area .file-area .progress .progress-text {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        color: #fff;
+                        font-size: 16px;
+                        top: 50%;
+                        -webkit-transform: translateY(-50%);
+                        transform: translateY(-50%);
+                        margin: 0 auto;
+                        z-index: 150;
+                        font-weight: 500;
+                    }
+
+                        .read-a-file-area .file-area .progress .progress-text span {
+                            font-size: 24px;
+                            vertical-align: middle;
+                            margin-right: 5px;
+                            position: relative;
+                            top: -1px;
+                            -webkit-animation: rotation 2s infinite linear;
+                            animation: rotation 2s infinite linear;
+                        }
+
+            .read-a-file-area .inner {
+                padding: 4rem 2rem;
+            }
+
+                .read-a-file-area .inner span {
+                    font-size: 4rem;
+                }
+
+                .read-a-file-area .inner div {
+                    font-size: 1.5rem;
+                    font-weight: 300;
+                }
+
+        .create-a-file-area {
+            background: #9C27B0;
+            position: relative;
+            text-align: center;
+            cursor: pointer;
+        }
+
+            .create-a-file-area:hover {
+                background: #9CCC65;
+            }
+
+            .create-a-file-area .inner {
+                position: absolute;
+                top: 50%;
+                -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
+
+                .create-a-file-area .inner span {
+                    font-size: 4rem;
+                }
+
+                .create-a-file-area .inner div {
+                    font-size: 1.5rem;
+                    font-weight: 300;
+                }
     </style>
 </head>
 
@@ -628,60 +887,82 @@
         </div>
     </div>
 
-    <ul class='custom-menu'>
-        <!--<li data-action="first"><span class="material-symbols-outlined add-node-icon"> add_box </span> Add</li>-->
-        <li data-action="second" id="EditNode"><span class="material-symbols-outlined edit-node-icon"> edit </span> Edit</li>
-        <li data-action="third" id="DeleteNode"><span class="material-symbols-outlined delete-node-icon"> delete </span> Delete</li>
-    </ul>
-    <div id="AddNodeEdge">
-        <div class="NodesWrapper">
-            <h2>New State</h2>
-            <span class="label"> ID:</span>
-            <input type="text" id="node-id" value="" placeholder="Enter ID" />
-            <span class="label"> Label:</span>
-            <input id="node-label" type="text" value="" placeholder="Enter Name" />
-            <br />
-            <button id="node-add" class="add-btn">Add</button>
-            <button id="node-update" class="update-btn" onclick="updateNode();">Update</button>
-            <button id="node-remove" class="remove-btn" onclick="removeNode();">Remove</button>
-        </div>
-        <div class="EdgesWrapper">
-            <h2>New Connection</h2>
-            <span class="label"> ID:</span>
-            <select name="edge-id" id="edge-id">
-            </select>
-            <span class="label"> From:</span><input id="edge-from" type="text" value="" placeholder="Node ID" />
-            <span class="label"> To:</span><input id="edge-to" type="text" value="" placeholder="Node ID" />
-            <br />
-            <button id="edge-add" class="add-btn" onclick="addEdge();">Add</button>
-            <button id="edge-update" class="update-btn" onclick="updateEdge();">Update</button>
-            <button id="edge-remove" class="remove-btn" onclick="removeEdge();">Remove</button>
-        </div>
-    </div>
-    <div class="add-new-state-wrapper">
-        <span class="material-symbols-outlined add-node-icon"> add_box </span> Add
-    </div>
-    <div class="search-state-wrapper">
-        <input type="text" id="search-node" name="search-node" placeholder="000" maxlength="3" />
-        <span class="material-symbols-outlined add-node-icon"> search </span>
-    </div>
-    <div id="mynetwork"></div>
-    <div id="selectedNode">
-        <span class="material-symbols-outlined close-node-details">
-            close
-        </span>
-        <h2>Selected State Details</h2>
-        <div id="selectedNodeDetails">
-            <p>Please select a state to get details</p>
-        </div>
-        <div id="saveEditBtn" style="display: none;">
-            Save Changes <span class="material-symbols-outlined"> done_all </span>
-        </div>
-        <div id="exportBtn">
-            Generate States File <span class="material-symbols-outlined"> settings </span>
+    <div id="FileUploadArea">
+        <div class="col-6 read-a-file-area" id="ReadFileArea">
+            <div class="inner">
+                <span class="material-symbols-outlined">
+                    account_tree
+                </span>
+                <div>Read States File</div>
+                <div class="file-area">
+                    <input class="form-control" type="file" id="formFile">
+                    <div class="file-upload-btn">
+                        Upload file
+                    </div>
+
+                    <div class="progress invisible">
+                        <p class="progress-text"></p>
+                        <div class="progress-bar progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <div id="NetWorkAreaWrapper">
+
+        <ul class='custom-menu'>
+            <!--<li data-action="first"><span class="material-symbols-outlined add-node-icon"> add_box </span> Add</li>-->
+            <li data-action="second" id="EditNode"><span class="material-symbols-outlined edit-node-icon"> edit </span> Edit</li>
+            <li data-action="third" id="DeleteNode"><span class="material-symbols-outlined delete-node-icon"> delete </span> Delete</li>
+        </ul>
+
+        <div class="add-new-state-wrapper">
+            <span class="material-symbols-outlined add-node-icon"> add_box </span> Add
+        </div>
+
+        <div class="search-state-wrapper">
+            <input type="text" id="search-node" name="search-node" placeholder="000" maxlength="3" />
+            <span class="material-symbols-outlined add-node-icon"> search </span>
+        </div>
+
+        <div class="navigation-wrapper">
+            <ul>
+                <li>
+                    <a href="#" class="active">States</a>
+                </li>
+                <li>
+                    <a href="#">Screens</a>
+                </li>
+                <li>
+                    <a href="#">Timer</a>
+                </li>
+                <li>
+                    <a href="#">FITS</a>
+                </li>
+            </ul>
+        </div>
+
+        <div id="mynetwork"></div>
+
+        <div id="selectedNode">
+            <span class="material-symbols-outlined close-node-details">
+                close
+            </span>
+            <h2>Selected State Details</h2>
+            <div id="selectedNodeDetails">
+                <p>Please select a state to get details</p>
+            </div>
+            <div id="saveEditBtn" style="display: none;">
+                Save Changes <span class="material-symbols-outlined"> done_all </span>
+            </div>
+            <div id="exportBtn">
+                Generate States File <span class="material-symbols-outlined"> settings </span>
+            </div>
+        </div>
+
+    </div>
+    
     <div class="modal" tabindex="-1" id="AddNewStateModal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -725,7 +1006,7 @@
     </div>
 
     <div class="modal" tabindex="-1" id="EnlargeImageView">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span class="material-symbols-outlined close-node-details-2">
@@ -734,6 +1015,15 @@
                 </button>
                 <div class="modal-body">
                     <div class="enlarged-image-wrapper">
+                        <div class="btnA"></div>
+                        <div class="btnB"></div>
+                        <div class="btnC"></div>
+                        <div class="btnD"></div>
+
+                        <div class="btnI"></div>
+                        <div class="btnH"></div>
+                        <div class="btnG"></div>
+                        <div class="btnF"></div>
                         <img id="IMAGE_ID" />
                     </div>
                 </div>
