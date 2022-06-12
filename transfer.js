@@ -674,7 +674,7 @@ $(document).ready(function () {
 
                             setTimeout(function () {
                                 //console.log(response.result);
-                                $("#FileUploadArea").fadeOut();
+                                $("#FileUploadArea").hide();
                                 $("#NetWorkAreaWrapper").fadeIn();
 
                                 OnPageLoadTriggerBaseNode("000");

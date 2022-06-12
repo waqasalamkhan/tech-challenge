@@ -69,7 +69,7 @@
             border-radius: 5px;
             box-shadow: 0 0px 5px 5px rgb(0 0 0 / 5%);
             padding: 1rem;
-            height: 90%;
+            height: 95%;
             min-width: 300px;
             display: none;
         }
@@ -679,11 +679,10 @@
         }
 
         #EnlargeImageView .modal-body {
-            padding: 2rem 0;
+            padding: 2rem;
         }
 
         #EnlargeImageView .modal-content {
-            background: none;
             border: 0;
         }
 
@@ -694,11 +693,14 @@
 
         .enlarged-image-wrapper img {
             width: 500px;
+            border: 2px solid #222;
+            z-index: 9999;
+            position: relative;
         }
 
         .enlarged-image-wrapper div {
             position: absolute;
-            width: 150px;
+            width: 120px;
             height: 50px;
             background: #FFF176;
             color: #fff;
@@ -825,6 +827,7 @@
 
                 .read-a-file-area .inner span {
                     font-size: 4rem;
+                    margin-bottom: 0.5rem;
                 }
 
                 .read-a-file-area .inner div {
@@ -887,6 +890,23 @@
         </div>
     </div>
 
+    <div class="navigation-wrapper">
+        <ul>
+            <li>
+                <a href="#" class="active">States</a>
+            </li>
+            <li>
+                <a href="#">Screens</a>
+            </li>
+            <li>
+                <a href="#">Timer</a>
+            </li>
+            <li>
+                <a href="#">FITS</a>
+            </li>
+        </ul>
+    </div>
+
     <div id="FileUploadArea">
         <div class="col-6 read-a-file-area" id="ReadFileArea">
             <div class="inner">
@@ -926,23 +946,6 @@
             <span class="material-symbols-outlined add-node-icon"> search </span>
         </div>
 
-        <div class="navigation-wrapper">
-            <ul>
-                <li>
-                    <a href="#" class="active">States</a>
-                </li>
-                <li>
-                    <a href="#">Screens</a>
-                </li>
-                <li>
-                    <a href="#">Timer</a>
-                </li>
-                <li>
-                    <a href="#">FITS</a>
-                </li>
-            </ul>
-        </div>
-
         <div id="mynetwork"></div>
 
         <div id="selectedNode">
@@ -962,7 +965,7 @@
         </div>
 
     </div>
-    
+
     <div class="modal" tabindex="-1" id="AddNewStateModal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
