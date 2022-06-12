@@ -1,9 +1,8 @@
 <html>
 <head>
-    <title>States - ATM Master</title>
+    <title>Timer - ATM Master</title>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="module" src="./transfer.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
@@ -15,6 +14,7 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
     <script type="text/javascript" src="lib/txt-reader.min.js"></script>
+    <script type="text/javascript" src="lib/scripts.js"></script>
 
     <style type="text/css">
 
@@ -488,6 +488,9 @@
                 width: 100%;
                 height: 5px;
             }
+            .exported-file-data-wrapper .generated-data-row {
+                margin-bottom: 5px;
+            }
 
         #ExportedFileDataPreview .modal-body {
             padding: 0;
@@ -864,6 +867,52 @@
                     font-size: 1.5rem;
                     font-weight: 300;
                 }
+
+        .fields-mapper {
+            margin: 6rem 6rem 0 6rem;
+            background: #fff;
+            border: 1px solid;
+            max-height: 80vh;
+            overflow: auto;
+            border: 2px dashed #1D88E5;
+            z-index: 999;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0px 5px 5px rgb(0 0 0 / 5%);
+            padding: 3rem;
+        }
+            .fields-mapper .row {
+                margin-bottom: 10px;
+            }
+                .fields-mapper .row .field-label {
+                    color: rgba(0,0,0,0.6);
+                    margin: 0 0 10px 0;
+                    font-size: 12px;
+                    font-weight: 500;
+                    text-transform: capitalize;
+                    margin: 0;
+                }
+                .fields-mapper .row .form-control {
+                    color: rgba(0,0,0,0.6);
+                    margin: 0 0 10px 0;
+                    font-size: 12px;
+                    font-weight: 500;
+                    text-transform: capitalize;
+                    font-weight: 600;
+                    padding: 0 0 0 5px;
+                    border: 1px solid #ccc;
+                    border-radius: 2px;
+                    font-weight: 600;
+                }
+            .fields-mapper .actions-col span.material-symbols-outlined {
+                color: #EF5350;
+                cursor: pointer;
+                position: relative;
+                top: 3px;
+            }
+        #GeneratedDataModal .modal-body {
+            padding: 0;
+        }
     </style>
 </head>
 
@@ -890,16 +939,20 @@
         </div>
     </div>
 
+    <div class="add-new-state-wrapper" onclick="GenerateNDCObject(event)">
+        <span class="material-symbols-outlined add-node-icon"> add_box </span> Generate
+    </div>
+
     <div class="navigation-wrapper">
         <ul>
             <li>
-                <a href="/StatesMaster" class="active">States</a>
+                <a href="/StatesMaster">States</a>
             </li>
             <li>
                 <a href="screens.html">Screens</a>
             </li>
             <li>
-                <a href="timer.html">Timer</a>
+                <a href="timer.html" class="active">Timer</a>
             </li>
             <li style="opacity: 0.4; pointer-events: none; background: #eee;">
                 <a href="fits.html">FITS</a>
@@ -911,9 +964,9 @@
         <div class="col-6 read-a-file-area" id="ReadFileArea">
             <div class="inner">
                 <span class="material-symbols-outlined">
-                    account_tree
+                    timer
                 </span>
-                <div>Read States File</div>
+                <div>Read Timer File</div>
                 <div class="file-area">
                     <input class="form-control" type="file" id="formFile">
                     <div class="file-upload-btn">
@@ -929,41 +982,12 @@
         </div>
     </div>
 
-    <div id="NetWorkAreaWrapper">
+    <div id="FieldsAreaWrapper" style="display: none;">
+        <div class="container">
+            <div class="fields-mapper">
 
-        <ul class='custom-menu'>
-            <!--<li data-action="first"><span class="material-symbols-outlined add-node-icon"> add_box </span> Add</li>-->
-            <li data-action="second" id="EditNode"><span class="material-symbols-outlined edit-node-icon"> edit </span> Edit</li>
-            <li data-action="third" id="DeleteNode"><span class="material-symbols-outlined delete-node-icon"> delete </span> Delete</li>
-        </ul>
-
-        <div class="add-new-state-wrapper">
-            <span class="material-symbols-outlined add-node-icon"> add_box </span> Add
-        </div>
-
-        <div class="search-state-wrapper">
-            <input type="text" id="search-node" name="search-node" placeholder="000" maxlength="3" />
-            <span class="material-symbols-outlined add-node-icon"> search </span>
-        </div>
-
-        <div id="mynetwork"></div>
-
-        <div id="selectedNode">
-            <span class="material-symbols-outlined close-node-details">
-                close
-            </span>
-            <h2>Selected State Details</h2>
-            <div id="selectedNodeDetails">
-                <p>Please select a state to get details</p>
-            </div>
-            <div id="saveEditBtn" style="display: none;">
-                Save Changes <span class="material-symbols-outlined"> done_all </span>
-            </div>
-            <div id="exportBtn">
-                Generate States File <span class="material-symbols-outlined"> settings </span>
             </div>
         </div>
-
     </div>
 
     <div class="modal" tabindex="-1" id="AddNewStateModal">
@@ -1029,6 +1053,24 @@
                         <div class="btnF"></div>
                         <img id="IMAGE_ID" />
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal ndc-image-data-modal" tabindex="-1" id="GeneratedDataModal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Exported Timer File Data</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="inner exported-file-data-wrapper">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="onClickCloseModal('GeneratedDataModal')" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
