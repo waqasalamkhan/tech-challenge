@@ -296,7 +296,7 @@ class StatesService{
   
           case 'K':
 
-              console.log(data);
+              //console.log(data);
               parsed.set('description', 'FIT Switch');
 
             parsed.set('next_state1', this.getEntry(data, 2));
@@ -563,7 +563,8 @@ class StatesService{
      * [addStateString add state passed as a string]
      * @param {[type]} state [string, e.g. '000A870500128002002002001127']
      */
-    addStateString(state){
+    addStateString(state) {
+
       let parsed = this.parseState(state);
       if(parsed){
         this.states[parsed.get('number')] = parsed;
@@ -665,6 +666,10 @@ class StatesService{
         return true;
       }else
         return false;
+    }
+
+    clear() {
+        this.states = "";
     }
   
     /**

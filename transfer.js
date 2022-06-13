@@ -7,132 +7,502 @@ var RawExportedKeys = [];
 var RawExportedData = [];
 var TempArray = [];
 var reader = new TxtReader();
+var DataObj;
 
-var DataObj = [
-    "000 A 073 000 065 255 255 118 255 000 FS",
-    "001 S 002 002 002 002 002 002 002 000 FS",
-    "002 E 002 005 005 002 006 006 006 000 FS",
-    "003 B 003 014 015 000 005 004 008 003 FS",
-    "004 E 000 000 000 000 000 000 000 000 FS",
-    "005 J 000 000 008 000 000 000 000 000 FS",
-    "006 K 070 078 078 078 255 255 255 255 FS",
-    "007 K 009 009 009 009 009 009 009 009 FS",
-    "008 Y 005 005 005 081 255 001 063 000 FS",
-    "009 D 008 255 000 000 000 000 000 000 FS",
-    "010 E 006 005 005 255 255 023 023 006 FS",
-    "011 D 010 024 000 008 000 000 000 000 FS",
-    "012 I 007 005 001 002 001 000 000 000 FS",
-    "013 D 023 006 008 016 016 032 000 000 FS",
-    "014 J 073 000 012 012 012 000 000 000 FS",
-    "015 J 013 000 013 013 013 000 000 000 FS",
-    "016 D 020 000 008 000 000 016 000 000 FS",
-    "017 D 010 000 042 000 000 000 000 028 FS",
-    "018 D 026 000 000 000 000 008 000 000 FS",
-    "019 E 014 014 015 255 255 255 255 000 FS",
-    "020 E 006 014 015 255 255 021 021 006 FS",
-    "021 F 015 014 015 255 255 022 015 016 FS",
-    "022 G 023 255 000 000 002 000 001 000 FS",
-    "023 E 017 014 015 255 255 025 025 004 FS",
-    "024 D 025 239 000 000 016 000 000 000 FS",
-    "025 I 007 014 001 002 001 001 001 000 FS",
-    "026 b 014 014 015 025 005 018 019 101 FS",
-    "027 D 025 000 008 000 000 096 000 000 FS",
-    "028 Z 000 000 000 000 000 000 000 000 FS",
-    "029 E 023 014 015 255 255 021 021 005 FS",
-    "030 D 031 000 000 000 008 016 000 000 FS",
-    "031 > 008 002 000 000 032 033 034 035 FS",
-    "032 Z 154 155 156 157 158 159 160 161 FS",
-    "033 Z 038 015 061 062 061 000 000 000 FS",
-    "034 Z FFF FFF 07F 000 000 000 000 000 FS",
-    "035 Z 000 000 000 000 000 000 000 000 FS",
-    "036 Z 155 001 090 524 000 000 000 000 FS",
-    "037 > 255 255 255 255 000 000 000 000 FS",
-    "038 I 007 014 001 000 001 000 000 001 FS",
-    "050 H 150 051 015 255 255 053 050 003 FS",
-    "052 I 007 051 000 000 001 000 000 001 FS",
-    "053 D 052 000 001 002 064 128 000 000 FS",
-    "054 E 069 014 015 255 255 224 015 000 FS",
-    "055 > 000 000 000 000 000 000 000 000 FS",
-    "061 J 157 000 081 081 081 000 000 064 FS",
-    "062 J 071 000 071 000 000 000 000 000 FS",
-    "063 Z 000 000 064 000 000 000 000 000 FS",
-    "064 Z 000 000 000 000 000 000 000 000 FS",
-    "065 J 071 000 071 000 000 000 000 000 FS",
-    "066 H 066 014 065 255 255 116 230 003 FS",
-    "067 J 072 072 072 072 072 072 072 072 FS",
-    "068 H 067 014 065 255 255 221 065 001 FS",
-    "069 H 068 014 065 255 255 223 065 003 FS",
-    "070 B 003 014 015 000 005 004 071 003 FS",
-    "071 E 050 014 015 072 073 077 255 007 FS",
-    "072 E 051 014 015 075 075 075 075 000 FS",
-    "073 E 051 014 015 077 077 077 077 007 FS",
-    "075 Y 052 014 015 076 255 000 015 000 FS",
-    "076 H 053 014 015 255 255 077 076 043 FS",
-    "077 I 007 014 001 000 001 001 001 001 FS",
-    "078 Y 060 005 005 095 255 007 007 091 FS",
-    "080 B 003 014 015 000 005 004 085 003 FS",
-    "081 W 092 097 010 026 093 090 255 255 FS",
-    "083 B 003 014 015 000 000 004 086 003 FS",
-    "084 B 003 014 015 000 005 004 085 003 FS",
-    "085 E 061 005 005 016 011 030 255 000 FS",
-    "086 E 062 005 005 016 102 011 017 000 FS",
-    "090 X 063 005 005 023 103 032 255 000 FS",
-    "091 Z 000 300 600 000 000 000 000 000 FS",
-    "092 D 020 255 002 000 000 000 000 000 FS",
-    "093 H 064 000 000 093 015 094 255 101 FS",
-    "094 F 065 014 015 255 255 099 015 016 FS",
-    "095 K 070 003 080 083 000 000 000 000 FS",
-    "096 Z 003 002 004 000 000 000 000 000 FS",
-    "097 D 010 255 000 002 000 000 000 000 FS",
-    "098 D 025 239 000 000 000 016 000 000 FS",
-    "099 E 006 014 015 255 255 100 100 006 FS",
-    "100 E 023 014 015 255 255 023 023 005 FS",
-    "101 Z 002 001 000 000 000 000 000 000 FS",
-    "102 G 090 255 000 000 002 000 002 000 FS",
-    "103 Z 001 002 005 010 100 050 020 015 FS",
-    "113 J 030 255 020 021 022 000 255 028 FS",
-    "114 E 069 014 065 255 255 116 065 007 FS",
-    "115 > 008 004 002 008 032 033 034 035 FS",
-    "116 I 007 014 001 000 001 001 001 001 FS",
-    "118 E 074 014 065 255 066 225 065 001 FS",
-    "119 E 075 014 065 999 116 065 999 000 FS",
-    "120 E 073 000 065 255 255 118 255 000 FS",
-    "220 D 068 001 000 000 008 016 000 000 FS",
-    "221 I 007 014 001 000 001 001 001 003 FS",
-    "222 D 069 000 000 000 008 006 000 000 FS",
-    "223 I 007 014 001 000 001 001 001 001 FS",
-    "224 D 115 009 000 000 009 009 000 000 FS",
-    "225 H 066 014 065 255 255 226 230 003 FS",
-    "226 I 007 014 001 000 001 001 001 001 FS",
-    "227 D 228 001 000 000 010 018 000 000 FS",
-    "228 H 067 014 065 255 255 229 065 001 FS",
-    "229 I 007 014 001 000 001 001 001 003 FS",
-    "230 J 230 000 230 230 230 000 000 000 FS",
-    "231 D 232 002 000 000 011 019 000 000 FS",
-    "232 H 077 014 065 255 255 233 065 003 FS",
-    "233 I 007 014 001 000 001 001 001 001 FS",
-    "234 E 085 014 015 255 255 237 015 000 FS",
-    "235 D 234 009 000 000 012 020 000 000 FS",
-    "236 > 008 004 002 008 032 033 034 035 FS",
-    "237 D 236 009 000 000 013 021 000 000 FS",
-    "238 H 079 014 065 255 255 116 230 003 FS",
-    "239 H 080 014 065 255 255 116 230 003 FS",
-    "240 J 081 000 081 081 081 000 000 000 FS",
-    "241 J 082 000 082 081 081 000 000 000 FS",
-    "242 J 084 000 084 081 081 000 000 000 FS",
-    "243 J 083 242 084 081 081 000 000 000 FS",
-    "244 E 086 014 065 255 255 115 065 001 FS",
-    "245 H 088 014 065 255 255 221 065 001 FS",
-    "246 H 088 014 065 255 229 065 255 001 FS",
-    "247 E 086 014 065 255 255 236 065 001 FS",
-    "248 E 089 014 065 255 255 115 065 001 FS",
-    "249 E 089 014 065 255 255 236 065 001 FS",
-    "300 + 303 006 000 001 000 000 094 000 FS",
-    "301 . 000 000 000 000 000 000 000 000 FS",
-    "302 / 007 000 000 000 000 000 000 000 FS",
-    "303 , 007 301 006 000 000 000 000 000 FS",
-    "304 ? 000 000 000 000 000 000 000 000 FS"
+var TransactionTypes = [
+    {
+        'Value': 'A',
+        'Text': 'Card Read',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Good Read of Card Next State",
+            "Octate3": "Misread Screen To Displayed",
+            "Octate4": "Read Condition 1",
+            "Octate5": "Read Condition 2",
+            "Octate6": "Read Condition 3",
+            "Octate7": "Return Card",
+            "Octate8": "No match on FIT Next State"
+        }]
+    },
+    {
+        'Value': 'B',
+        'Text': 'PIN Entry',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "Good Local PIN Check Next State",
+            "Octate5": "Maximum Bad PINs Next State Number",
+            "Octate6": "Local PIN Check Error Screen",
+            "Octate7": "Remote PIN Check Next State",
+            "Octate8": "Maximum Local PIN Attempts"
+        }]
+    },
+    {
+        'Value': 'C',
+        'Text': 'Envelope Dispenser',
+        'Octates': [{
+            "Octate1": "Next State Number",
+            "Octate2": "Reserved. Must be 000",
+            "Octate3": "Reserved. Must be 000",
+            "Octate4": "Reserved. Must be 000",
+            "Octate5": "Reserved. Must be 000",
+            "Octate6": "Reserved. Must be 000",
+            "Octate7": "Reserved. Must be 000",
+            "Octate8": "Reserved. Must be 000"
+        }]
+    },
+    {
+        'Value': 'D',
+        'Text': 'Preset Operation Code Buffer',
+        'Octates': [{
+            "Octate1": "Next State Number",
+            "Octate2": "Clear Mask",
+            "Octate3": "'A' Preset Mask",
+            "Octate4": "'B' Preset Mask",
+            "Octate5": "'C' Preset Mask",
+            "Octate6": "'D' Preset Mask",
+            "Octate7": "Reserved. Must be 000",
+            "Octate8": "Extension State"
+        }]
+    },
+    {
+        'Value': 'E',
+        'Text': 'Four FDK Selection Function',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "FDK 'A' Next State",
+            "Octate5": "FDK 'B' Next State",
+            "Octate6": "FDK 'C' Next State",
+            "Octate7": "FDK 'D' Next State",
+            "Octate8": "Buffer Location"
+        }]
+    },
+    {
+        'Value': 'F',
+        'Text': 'Amount Entry',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "FDK 'A' Next State",
+            "Octate5": "FDK 'B' Next State",
+            "Octate6": "FDK 'C' Next State",
+            "Octate7": "FDK 'D' Next State",
+            "Octate8": "Amount Display Screen"
+        }]
+    },
+    {
+        'Value': 'G',
+        'Text': 'Amount Check',
+        'Octates': [{
+            "Octate1": "Amount Check Condition True",
+            "Octate2": "Amount Check Condition False",
+            "Octate3": "Buffer to Check",
+            "Octate4": "Integer Multiple Value",
+            "Octate5": "Decimal Places",
+            "Octate6": "Currency Type",
+            "Octate7": "Amount Check Condition",
+            "Octate8": "Reserved"
+        }]
+    },
+    {
+        'Value': 'H',
+        'Text': 'Information Entry',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "FDK 'A' Next State",
+            "Octate5": "FDK 'B' Next State",
+            "Octate6": "FDK 'C' Next State",
+            "Octate7": "FDK 'D' Next State",
+            "Octate8": "Buffer And Display Parameters"
+        }]
+    },
+    {
+        'Value': 'I',
+        'Text': 'Transaction Request',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Host Timeout Next State",
+            "Octate3": "Send Track 2",
+            "Octate4": "Send Track 1/3 CIM",
+            "Octate5": "Send Operation Code Data",
+            "Octate6": "Send Amount Data",
+            "Octate7": "Send PIN Buffer",
+            "Octate8": "Send Buffer B And C"
+        }]
+    },
+    {
+        'Value': 'J',
+        'Text': 'Close',
+        'Octates': [{
+            "Octate1": "Receipt Delivered Screen Number",
+            "Octate2": "Next State",
+            "Octate3": "No Receipt Screen Number",
+            "Octate4": "Card Retained Screen Number",
+            "Octate5": "Statement Delivered Screen Number",
+            "Octate6": "Reserved. Must be 000",
+            "Octate7": "BNA Notes Returned Screen",
+            "Octate8": "Extension State"
+        }]
+    },
+    {
+        'Value': 'K',
+        'Text': 'FIT Switch',
+        'Octates': [{
+            "Octate1": "Next State 1",
+            "Octate2": "Next State 2",
+            "Octate3": "Next State 3",
+            "Octate4": "Next State 4",
+            "Octate5": "Next State 5",
+            "Octate6": "Next State 6",
+            "Octate7": "Next State 7",
+            "Octate8": "Next State 8"
+        }]
+    },
+    {
+        'Value': 'L',
+        'Text': 'Card Write',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Good Write Next State",
+            "Octate3": "Bad Write Next State",
+            "Octate4": "No Write Attempted Next State",
+            "Octate5": "Reserved. Must be 000",
+            "Octate6": "Reserved. Must be 000",
+            "Octate7": "Reserved. Must be 000",
+            "Octate8": "Reserved. Must be 000"
+        }]
+    },
+    {
+        'Value': 'M',
+        'Text': 'Enhanced PIN Entry',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "Good Local PIN Check Next State",
+            "Octate5": "Maximum Bad PINs Next State Number",
+            "Octate6": "Local PIN Check Error Screen",
+            "Octate7": "Remote PIN Check Next State",
+            "Octate8": "Maximum Local PIN Attempts"
+        }]
+    },
+    {
+        'Value': 'N',
+        'Text': 'Camera Control',
+        'Octates': [{
+            "Octate1": "Picture Type",
+            "Octate2": "Next State",
+            "Octate3": "Reserved. Must be 000",
+            "Octate4": "Reserved. Must be 000",
+            "Octate5": "Reserved. Must be 000",
+            "Octate6": "Reserved. Must be 000",
+            "Octate7": "Reserved. Must be 000",
+            "Octate8": "Reserved. Must be 000"
+        }]
+    },
+    {
+        'Value': 'R',
+        'Text': 'Enhanced Amount Entry',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "FDK 'A' Next State",
+            "Octate5": "FDK 'B' Next State",
+            "Octate6": "FDK 'C' Next State",
+            "Octate7": "FDK 'D' Next State",
+            "Octate8": "Extension State"
+        }]
+    },
+    {
+        'Value': 'S',
+        'Text': 'Language Code Switch',
+        'Octates': [{
+            "Octate1": "No Language Code Next State",
+            "Octate2": "Language 0 Next State",
+            "Octate3": "Language 1 Next State",
+            "Octate4": "Language 2 Next State",
+            "Octate5": "Language 3 Next State",
+            "Octate6": "Language 4 Next State",
+            "Octate7": "Language 5 Next State",
+            "Octate8": "Extension State"
+        }]
+    },
+    {
+        'Value': 'T',
+        'Text': 'Card Read - PIN Entry Initiation',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Good Read of Card Next State",
+            "Octate3": "Misread Screen To Displayed",
+            "Octate4": "Read Condition 1",
+            "Octate5": "Read Condition 2",
+            "Octate6": "Read Condition 3",
+            "Octate7": "Return Card",
+            "Octate8": "Extension State"
+        }]
+    },
+    {
+        'Value': 'U',
+        'Text': 'Device Fitness Flow Select',
+        'Octates': [{
+            "Octate1": "Device Number",
+            "Octate2": "Device Available Next State",
+            "Octate3": "Device Identifier Graphic",
+            "Octate4": "Device Unavailable Next State",
+            "Octate5": "Device Sub-Component Identifier",
+            "Octate6": "Reserved. Must be 000",
+            "Octate7": "Reserved. Must be 000",
+            "Octate8": "Reserved. Must be 000"
+        }]
+    },
+    {
+        'Value': 'V',
+        'Text': 'Language Select From Card',
+        'Octates': [{
+            "Octate1": "Next State Number",
+            "Octate2": "Screen Group 1 Code",
+            "Octate3": "Screen Group 2 Code",
+            "Octate4": "Screen Group 3 Code",
+            "Octate5": "Screen Group 4 Code",
+            "Octate6": "Screen Group 5 Code",
+            "Octate7": "Screen Group 6 Code",
+            "Octate8": "Language Group Size"
+        }]
+    },
+    {
+        'Value': 'W',
+        'Text': 'FDK Switch',
+        'Octates': [{
+            "Octate1": "FDK 'A' Next State",
+            "Octate2": "FDK 'B' Next State",
+            "Octate3": "FDK 'C' Next State",
+            "Octate4": "FDK 'D' Next State",
+            "Octate5": "FDK 'F' Next State",
+            "Octate6": "FDK 'G' Next State",
+            "Octate7": "FDK 'H' Next State",
+            "Octate8": "FDK 'I' Next State"
+        }]
+    },
+    {
+        'Value': 'X',
+        'Text': 'FDK Information Entry',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "FDK Pressed Next State",
+            "Octate5": "Extension State",
+            "Octate6": "Buffer ID",
+            "Octate7": "Active Key Mask",
+            "Octate8": "Reserved. Must be 000"
+        }]
+    },
+    {
+        'Value': 'Y',
+        'Text': 'Eight FDK Selection Function',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "FDK Pressed Next State",
+            "Octate5": "Extension State",
+            "Octate6": "Buffer Position",
+            "Octate7": "Active Key Mask",
+            "Octate8": "Multiple Language Extension State",
+        }]
+    },
+    {
+        'Value': 'Z',
+        'Text': 'Extension State',
+        'Octates': [{
+            "Octate1": "Buffer ID1",
+            "Octate2": "Buffer ID2",
+            "Octate3": "Buffer ID1 > Buffer ID2 Next State Num",
+            "Octate4": "Buffer ID1 < Buffer ID2 Next State Num",
+            "Octate5": "Reserved. Must be 000",
+            "Octate6": "Reserved. Must be 000",
+            "Octate7": "Reserved. Must be 000",
+            "Octate8": "Reserved. Must be 000"
+        }]
+    },
+    {
+        'Value': 'b',
+        'Text': 'Customer Selectable PIN State',
+        'Octates': [{
+            "Octate1": "First Entry Screen",
+            "Octate2": "Timeout Screen State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "Good PIN Next State",
+            "Octate5": "CSP Fail Next State",
+            "Octate6": "Second Entry Screen",
+            "Octate7": "Miss Match First Entry Screen",
+            "Octate8": "Extension State"
+        }]
+    },
+    {
+        'Value': 'k',
+        'Text': 'Smart FIT Check State',
+        'Octates': [{
+            "Octate1": "Reserved. Must be 000",
+            "Octate2": "Good Read of Card Next State",
+            "Octate3": "Misread Screen To Displayed",
+            "Octate4": "Read Condition 1",
+            "Octate5": "Read Condition 2",
+            "Octate6": "Read Condition 3",
+            "Octate7": "Return Card",
+            "Octate8": "No match on FIT Next State"
+        }]
+    },
+    {
+        'Value': 'm',
+        'Text': 'PIN & Language Select State',
+        'Octates': [{
+            "Octate1": "Screen Number To Displayed",
+            "Octate2": "Customer Timeout Next State",
+            "Octate3": "Cancel Next State",
+            "Octate4": "Extension Number 1",
+            "Octate5": "Extension Number 2",
+            "Octate6": "Buffer Position",
+            "Octate7": "Active Key Mask",
+            "Octate8": "Extension Number 3"
+        }]
+    },
 ]
+
+if (JSON.parse(localStorage.getItem("FileParsedData")) == null) {
+    var DataObj = [
+        "000 k 000 017 000 000 000 000 001 002 FS",
+        "680 017 K 050 002 002 002 002 035 002 002 FS",
+        "680 087  Z  003  000  000  048  000  000  001  000 FS",
+        "680 089  Z  000  000  000  000  000  000  001  000 FS",
+        "680 125  W  100  183  150  100  100  100  100  100 FS",
+        "680 213  W  100  183  150  100  100  100  100  100 FS",
+        "680 571  E  350  112  111  255  255  441  573  005 FS",
+        "680 573  H  145  112  111  255  255  575  573  003 FS",
+        "680 575  H  057  112  111  255  255  551  573  001 FS",
+        "680 553  I  090  119  001  001  001  001  001  001 FS",
+        "680 555  I  090  119  001  001  001  001  001  003 FS",
+        "680 511  W  100  086  086  150  100  086  086  100 FS",
+        "680 651, 090 652 005 005 005 002 002 000 FS",
+        "680 662 k 000 665 000 000 000 000 001 002 FS",
+        "680 665 K 600 600 600 600 600 600 600 600 FS",
+        "680 648  ; 649  640  000  000  000  000  000  000 FS",
+        "680 649 / 090  182  183  656  000  000  000  000 FS",
+        "680 656  Z  640  640  002  002  002  002  640  000 FS",
+        "680 672  I  090  112  001  000  001  001  129  673 FS",
+        "680 673  Z  000  000  000  000  000  000  001  000 FS",
+        "680 270 I 090 119 001 001 001 001 129 271 FS",
+        "680 271 Z 003 000 000 000 000 000 001 000 FS",
+        "680 274 / 090 192 193 275 000 000 000 000 FS",
+        "680 275 Z 276 090 002 002 002 002 002 000 FS",
+        "680 276 ? 277 001 002 030 040 000 000 000 FS",
+        "680 277 I 090 119 001 001 001 001 129 278 FS",
+        "680 278 Z 003 000 000 000 000 000 001 000 FS",
+        "680 171 X 032 112 111 211 172 032 255 000 FS",
+        "680 172 Z 010 050 100 000 250 070 030 005 FS",
+        "680 211 W 085 085 085 160 085 085 085 085 FS",
+        "680 241; 242 090 000 000 000 000 000 000 FS ",
+        "680 242 / 090 192 193 243 000 000 000 000 FS",
+        "680 243 Z 244 090 002 002 002 002 002 000 FS",
+        "680 244 ? 246 001 001 030 040 000 000 000 FS",
+        "680 245 D 241 099 000 004 000 000 000 000 FS",
+        "680 246 I 090 119 001 001 001 001 129 247 FS",
+        "680 247 Z 003 000 000 000 000 000 001 000 FS",
+        "680 410; 411 090 000 000 000 000 000 000 FS ",
+        "680 411 / 090 192 193 412 000 000 000 000 FS",
+        "680 412 Z 413 090 002 002 002 002 002 000 FS",
+        "680 413 ? 414 001 012 030 040 000 000 000 FS",
+        "680 414 I 090 119 001 001 001 001 129 415 FS",
+        "680 415 Z 003 000 000 000 000 000 001 000 FS",
+        "680 310; 311 202 000 000 000 000 000 000 FS ",
+        "680 311 / 090 192 193 312 000 000 000 000 FS",
+        "680 312 Z 313 202 002 002 002 002 002 000 FS",
+        "680 313 ? 314 001 003 030 040 000 000 000 FS",
+        "680 314 I 090 119 001 001 001 001 129 317 FS",
+        "680 317 Z 003 000 000 048 000 000 001 000 FS",
+        "680 444; 445 448 000 000 000 000 000 000 FS ",
+        "680 445 / 090 182 183 446 000 000 000 000 FS",
+        "680 446 Z 447 448 002 002 002 002 448 000 FS",
+        "680 447 ? 448 001 008 030 030 000 000 000 FS",
+        "680 448 I 090 112 001 001 001 001 129 449 FS",
+        "680 449 Z 003 000 000 000 000 000 001 000 FS",
+        "680 450; 451 454 000 000 000 000 000 000 FS ",
+        "680 451 / 090 182 183 452 000 000 000 000 FS",
+        "680 452 Z 453 454 002 002 002 002 454 000 FS",
+        "680 453 ? 454 001 007 030 030 000 000 000 FS",
+        "680 454 I 090 112 001 001 001 001 129 455 FS",
+        "680 455 Z 003 000 000 000 000 000 001 000 FS",
+        "680 330; 331 334 000 000 000 000 000 000 FS ",
+        "680 331 / 090 182 183 332 000 000 000 000 FS",
+        "680 332 Z 333 334 002 002 002 002 334 000 FS",
+        "680 333 ? 334 001 008 030 030 000 000 000 FS",
+        "680 334 I 090 112 001 001 001 001 129 335 FS",
+        "680 335 Z 003 000 000 000 000 000 001 000 FS",
+        "680 340; 341 344 000 000 000 000 000 000 FS ",
+        "680 341 / 090 182 183 342 000 000 000 000 FS",
+        "680 342 Z 343 344 002 002 002 002 344 000 FS",
+        "680 343 ? 344 001 006 030 030 000 000 000 FS",
+        "680 344 I 090 112 001 001 001 001 129 345 FS",
+        "680 345 Z 003 000 000 000 000 000 001 000 FS",
+        "680 360; 361 364 000 000 000 000 000 000 FS ",
+        "680 361 / 090 182 183 362 000 000 000 000 FS",
+        "680 362 Z 363 364 002 002 002 002 364 000 FS",
+        "680 363 ? 364 001 011 030 030 000 000 000 FS",
+        "680 364 I 090 112 001 001 001 001 129 365 FS",
+        "680 365 Z 003 000 000 000 000 000 001 000 FS",
+        "680 374; 375 060 000 000 000 000 000 000 FS ",
+        "680 375 / 060 182 183 376 000 000 000 000 FS",
+        "680 376 Z 060 060 002 002 002 002 060 000 FS",
+        "680 139 D 360 223 032 000 000 000 000 000 FS",
+        "680 146 D 444 223 032 000 000 000 000 000 FS",
+        "680 149 D 330 223 032 000 000 000 000 000 FS",
+        "680 366 X 403 112 111 367 368 032 255 000 FS",
+        "680 367 W 369 369 675 674 369 369 369 369 FS",
+        "680 368 Z 050 100 000 000 040 030 020 010 FS",
+        "680 378  W  255  255  255  371  371  255  255  255 FS",
+        "680 382  W  255  255  255  671  671  255  255  255 FS",
+        "680 380  D  671  223  000  000  032  032  000  000 FS",
+        "680 383  E  383  112  111  255  255  384  640  005 FS",
+        "680 384  D  371  223  032  000  000  000  000  000 FS",
+        "680 385  E  383  112  111  255  183  386  640  005 FS",
+        "680 386  D  671  223  032  000  000  000  000  000 FS",
+        "680 372 I 090 119 001 001 001 001 129 373 FS",
+        "680 373 Z 003 000 000 000 000 000 001 000 FS",
+        "680 356  Z  000  016  000  008  000  000  000  000 FS",
+        "680 687  W  100  183  100  100  100  100  100  100 FS",
+        "680 153; 157  640  000  000  000  000  000  000 FS",
+        "680 157 / 090  182  183  158  000  000  000  000 FS",
+        "680 158  Z  640  640  002  002  002  002  640  000 FS",
+        "680 165  Z  000  004  016  008  000  000  000  000 FS",
+        "680 682  Y  346  112  111  683  255  002  024  255 FS",
+        "680 683  W  100  100  100  648  100  100  100  100 FS",
+        "680 176   Y  050 112  111  187  255  002  012  255 FS",
+        "680 187   W  100 100  675  100  100  100  100  100 FS",
+        "680 181 Y 405 112 111 182 255 002 028 255 FS",
+        "680 182 W 255 255 183 150 150 255 255 255 FS",
+        "680 577 Y 411 112 111 578 255 007 012 255 FS",
+        "680 578 W 255 255 572 100 255 255 255 255 FS",
+        "680 601; 602 090 000 000 000 000 000 000 FS ",
+        "680 602 / 090 192 193 603 000 000 000 000 FS",
+        "680 603 Z 604 090 002 002 002 002 002 000 FS",
+        "680 604 ? 192 001 012 030 040 000 000 000 FS",
+        "680 630 Z 003 000 000 000 000 000 001 000 FS",
+        "680 611; 612 090 000 000 000 000 000 000 FS ",
+        "680 612 / 090 192 193 613 000 000 000 000 FS",
+        "680 613 Z 614 090 002 002 002 002 002 000 FS",
+        "680 614 ? 631 001 012 030 040 000 000 000 FS",
+        "680 632 Z 003 000 000 000 000 000 001 000 FS",
+    ]
+} else {
+    var DataObj = JSON.parse(localStorage.getItem("FileParsedData"));
+}
 
 var SanitizedObj = [];
 for (var x = 0; x < DataObj.length; x++) {
@@ -180,7 +550,7 @@ const options = {
         useDefaultGroups: true,
     },
     interaction: {
-        dragNodes: true,
+        dragNodes: false,
         dragView: true,
         hideEdgesOnDrag: false,
         hideEdgesOnZoom: false,
@@ -444,6 +814,25 @@ $(document).ready(function () {
 
         }
 
+        var AllInputs = $("#selectedNodeDetails input");
+
+        $('.enlarged-image-wrapper div').text("");
+
+        for (var x = 1; x < AllInputs.length - 1; x++) {
+            if ($(AllInputs[x]).parent().text().includes("FDK A")) {
+                $('.enlarged-image-wrapper .btnA').text("A: " + $(AllInputs[x]).parent().attr("id"));
+            }
+            if ($(AllInputs[x]).parent().text().includes("FDK B")) {
+                $('.enlarged-image-wrapper .btnB').text("B: " + $(AllInputs[x]).parent().attr("id"));
+            }
+            if ($(AllInputs[x]).parent().text().includes("FDK C")) {
+                $('.enlarged-image-wrapper .btnC').text("C: " + $(AllInputs[x]).parent().attr("id"));
+            }
+            if ($(AllInputs[x]).parent().text().includes("FDK D")) {
+                $('.enlarged-image-wrapper .btnD').text("D: " + $(AllInputs[x]).parent().attr("id"));
+            }
+        }
+
         $("#selectedNode").fadeIn(50);
 
         node.setOptions({
@@ -467,6 +856,7 @@ $(document).ready(function () {
                 processData: false,
                 success: function () {
                     $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/' + ImageID + ".jpg");
+
                 },
                 error: function (error) {
                     $("#IMAGE_ID").attr("src", window.location.href + "img/screens/no-image.png");
@@ -523,6 +913,84 @@ $(document).ready(function () {
     })
 
     $(".add-new-state-wrapper").on("click", function () {
+
+        $("#AddStateTypeDDL").html("");
+        $("#AddStateTypeDDL").append(`<option value="-1">Please select state type</option>`);
+
+        for (var x = 0; x < TransactionTypes.length; x++) {
+            $("#AddStateTypeDDL").append(`<option value="${TransactionTypes[x].Value}">${TransactionTypes[x].Value} - ${TransactionTypes[x].Text}</option>`);
+        }
+
+        $("#AddStateTypeDDL").on("change", function () {
+
+            $(".OctatesHolder").html("");
+
+            for (var x = 0; x < TransactionTypes.length; x++) {
+                if (TransactionTypes[x].Value == $(this).val()) {
+                    for (var key in TransactionTypes[x].Octates[0]) {
+                        $(".OctatesHolder").append(`<div class="col-6 mt-3">
+                                <label class="field-label">${TransactionTypes[x].Octates[0][key]}</label>
+                                <input class="form-control" value="" placeholder="000" type="text" maxlength="3" />
+                            </div>`)
+                    }
+                }
+            }
+
+        })
+
+        $(".final-add-state").on("click", function () {
+
+            var TempVar = "";
+            var StateNumber = $("#AddNewStateModal .form-control").first().val();
+            var StateType = $("#AddNewStateModal select option:selected").val();
+
+            $("#AddNewStateModal .form-control").each(function () {
+                $("#AddNewStateModal .form-control").each(function () {
+                    TempVar += $(this).val();
+                })
+            })
+
+            states.addStateString(TempVar);
+
+            nodes.add({
+                id: StateNumber,
+                label: StateNumber + " " + StateType,
+                level: 4,
+                shape: 'box',
+                font: { 'size': '40', 'face': 'monospace', 'align': 'center' },
+                heightConstraint: { minimum: 130 },
+                widthConstraint: { minimum: 130 },
+                choosen: "true"
+            });
+
+            var Edges = states.get(StateNumber);
+
+            //console.log(Edges);
+
+            for (const [key, value] of Edges.entries()) {
+                if (key == "states_to") {
+                    for (const [key2] of value.entries()) {
+
+                        edges.add({
+                            id: key2,
+                            from: StateNumber,
+                            to: key2,
+                            arrows: 'to',
+                            physics: false,
+                            smooth: { 'type': 'cubicBezier' }
+                        });
+                    }
+                }
+            }
+
+            $("#selectedNode").fadeOut(50);
+
+            OnPageLoadTriggerBaseNode(StateNumber);
+
+            $('#AddNewStateModal').modal('hide');
+
+        })
+
         $('#AddNewStateModal').modal('show');
     })
 
@@ -667,15 +1135,26 @@ $(document).ready(function () {
                     })
                     .then(function (response) {
 
-                        //console.log(response.result);
+                        data = response.result;
+                        var TempFileParsedArray = [];
 
                         setTimeout(function () {
                             $(".progress .progress-text").html("<span class='material-symbols-outlined'>settings</span>Rendering Nodes");
 
+                            for (var x = 0; x < data.length; x++) {
+                                if (!data[x].includes("STATES") && !data[x].includes("{") && data[x] != "" && data[x] != " ") {
+                                    console.log($.trim(data[x]));
+                                    TempFileParsedArray.push($.trim(data[x]));
+                                }
+                            }
+
                             setTimeout(function () {
                                 //console.log(response.result);
-                                $("#FileUploadArea").hide();
-                                $("#NetWorkAreaWrapper").fadeIn();
+                                //$("#FileUploadArea").hide();
+                                //$("#NetWorkAreaWrapper").fadeIn();
+
+                                localStorage.setItem("FileParsedData", JSON.stringify(TempFileParsedArray));
+                                location.reload();
 
                                 OnPageLoadTriggerBaseNode("000");
                             }, 500)
@@ -695,6 +1174,14 @@ $(document).ready(function () {
     })
 
     setTimeout(function () {
+
+        if (JSON.parse(localStorage.getItem("FileParsedData")) == null) {
+        } else {
+            $("#FileUploadArea").hide();
+            $("#NetWorkAreaWrapper").fadeIn();
+            $('.splash-wrapper').fadeOut(350);
+            localStorage.clear();
+        }
 
         $('.splash-wrapper').fadeOut(350);
 
@@ -732,16 +1219,3 @@ $(document).ready(function () {
     }, 1000)
 
 })
-
-//console.log(states.addState("136W100100155100100100100100"));
-
-//states.parseState('000A870500128002002002001127');
-
-// console.log(states.add(states.states));
-// console.log(states.states);
-
-//console.log(states.states);
-// console.log(states.getNodes());
-// console.log(states.getEdges());
-// console.log(states.prepareStatesToSave());
-//console.log(states.levels);
