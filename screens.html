@@ -36,7 +36,8 @@
             box-sizing: border-box;
             vertical-align: top;
         }
-            .ActionButtons .ActBtn{
+
+            .ActionButtons .ActBtn {
                 width: 100%;
                 height: 52px;
                 background: rgba(23, 172, 172, 1);
@@ -84,10 +85,11 @@
             background: green;
             border: 1px solid black;
         }
-        
-        .CodePanel{
+
+        .CodePanel {
             float: left;
         }
+
         .drawingButtonsPanel,
         .drawingArea,
         .atmScreens {
@@ -98,6 +100,7 @@
             border: 1px dashed rgba(255, 255, 255, 0.6);
             text-align: center;
             position: relative;
+            z-index: 999;
         }
 
 
@@ -145,6 +148,9 @@
             cursor: pointer;
             vertical-align: top;
             box-sizing: border-box;
+            z-index: 999;
+            line-height: 83px;
+            color: #fff;
         }
 
             .atmScreen.addNew {
@@ -177,7 +183,7 @@
         .atmScreensContextMenu:hover {
             background: rgba(253, 240, 223, 1);
         }
-        
+
         .atmButtonsContextMenu span:hover {
             background: rgba(40, 110, 253, 0.072);
         }
@@ -188,14 +194,20 @@
         }
 
 
-        .atmButtonsContextMenu span {
-            display: block;
-            padding: 5px;
-            box-sizing: border-box;
+            .atmButtonsContextMenu span {
+                display: block;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+
+        .ActiveImg {
+            border: 1px solid red;
         }
-      .ActiveImg{
-        border: 1px solid red;
-      }
+
+        .imgThumbnail {
+            width: 100px;
+            z-index: -999;
+        }
     </style>
 
 </head>
@@ -205,18 +217,18 @@
     <div class="CodePanel">
         <div class="ActionButtons buttonsLeft">
             <button class="ActBtn btnLeft" btnid="b1" id="AddCursorBtn">Cursor Point <br /></button>
-            <button class="ActBtn btnLeft" btnid="b2"id="AddTextBtn">Text<br /></button>
-            <button class="ActBtn btnLeft" btnid="b3"id="ClearScreenBtn">Clear Screen<br /></button>
-            <button class="ActBtn btnLeft" btnid="b4"id="AddImageBtn">Add Image<br /></button>
+            <button class="ActBtn btnLeft" btnid="b2" id="AddTextBtn">Text<br /></button>
+            <button class="ActBtn btnLeft" btnid="b3" id="ClearScreenBtn">Clear Screen<br /></button>
+            <button class="ActBtn btnLeft" btnid="b4" id="AddImageBtn">Add Image<br /></button>
         </div>
-        <textarea id="CodeField" name="CodeField">000</textarea>
+        <textarea id="CodeField" name="CodeField"></textarea>
     </div>
     <div class="drawingButtonsPanel">
         <div class="hiddenFileField">
             <input type="file" id="UploadFile" accept="image/png, image/jpeg, image/gif" onchange="onChange_UploadFile()" />
         </div>
-        <input type="button" class="panelBtn btn_Upload" onclick="onclick_AddBackground()" value="Add Background" />
-        <input type="button" class="panelBtn btn_Draw" onclick="onclick_StartDrawing()" value="Draw Field" />
+        <input type="button" class="panelBtn btn_Upload" value="Generate File" />
+        <input type="button" class="panelBtn btn_ToggleGrid" onclick="onclick_ToggleGrid()" value="Show Grid" />
     </div>
     <div class="drawingArea">
         <div class="atmButtonsContextMenu genericContextMenu">
@@ -231,17 +243,12 @@
             <button class="atmBtn btnLeft" btnid="b3">Button 3 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
             <button class="atmBtn btnLeft" btnid="b4">Button 4 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
         </div>
-        <span class="ATMScreenArea" style="position:relative;">
-            <div class="XCoordinates" style="position:absolute;">
-                <span>@</span>
-                <span>A</span>
-                <span>B</span>
-                <span>C</span>
-            </div>    
-            <div class="canvasContainer">
-                 <canvas id="canvas"></canvas>
+        <div class="canvasContainer">
+            <div>
+                <div></div>
             </div>
-        </span>
+            <canvas id="canvas"></canvas>
+        </div>
         <div class="atmButtons buttonsRight">
             <button class="atmBtn btnRight" btnid="b5">Button 5 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
             <button class="atmBtn btnRight" btnid="b6">Button 6 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
@@ -253,128 +260,130 @@
         <div class="atmScreensContextMenu genericContextMenu" onclick="onClick_RemoveScreen()">
             &#10005; Remove this screen
         </div>
-        <div class="atmScreen editableScreen active" title="Active Screen" uid=""></div>
+        <div class="atmScreen editableScreen active" title="Active Screen" uid="">
+            <img class="imgThumbnail">
+        </div>
         <div class="atmScreen addNew" onclick="onClick_AddNewScreen(event)" title="Add New Screen">Add New Screen</div>
     </div>
 
     <div class="modal fade" tabindex="-1" role="dialog" id="CursorModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Add Cursor Point</h4>
-          </div>
-          <div class="modal-body">
-           <div class="form-group">
-              <label for="CursorRow">Rows</label>
-              <select class="form-control" id="CursorRow" w>
-                <option>@</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-                <option>D</option>
-                <option>E</option>
-                <option>F</option>
-                <option>G</option>
-                <option>H</option>
-                <option>I</option>
-                <option>J</option>
-                <option>K</option>
-                <option>L</option>
-                <option>M</option>
-                <option>N</option>
-                <option>O</option>
-              </select>
-              <br>
-              <label for="CursorColumn">Columns</label>
-             <select class="form-control" id="CursorColumn">
-                <option>@</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-                <option>D</option>
-                <option>E</option>
-                <option>F</option>
-                <option>G</option>
-                <option>H</option>
-                <option>I</option>
-                <option>J</option>
-                <option>K</option>
-                <option>L</option>
-                <option>M</option>
-                <option>N</option>
-                <option>O</option>
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>:</option>
-                <option>;</option>
-                <option><</option>
-                <option>=</option>
-                <option>></option>
-                <option>?</option>
-            </select>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="onAddCursorPoint()">Add</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Cursor Point</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="CursorRow">Rows</label>
+                        <select class="form-control" id="CursorRow" w>
+                            <option>@</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>E</option>
+                            <option>F</option>
+                            <option>G</option>
+                            <option>H</option>
+                            <option>I</option>
+                            <option>J</option>
+                            <option>K</option>
+                            <option>L</option>
+                            <option>M</option>
+                            <option>N</option>
+                            <option>O</option>
+                        </select>
+                        <br>
+                        <label for="CursorColumn">Columns</label>
+                        <select class="form-control" id="CursorColumn">
+                            <option>@</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                            <option>E</option>
+                            <option>F</option>
+                            <option>G</option>
+                            <option>H</option>
+                            <option>I</option>
+                            <option>J</option>
+                            <option>K</option>
+                            <option>L</option>
+                            <option>M</option>
+                            <option>N</option>
+                            <option>O</option>
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>:</option>
+                            <option>;</option>
+                            <option><</option>
+                            <option>=</option>
+                            <option>></option>
+                            <option>?</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="onAddCursorPoint()">Add</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
     <div class="modal fade" tabindex="-1" role="dialog" id="TextModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Add Text</h4>
-          </div>
-          <div class="modal-body">
-           <div class="form-group">
-            <label for="TextField">Text</label>
-            <input type="text" class="form-control" id="TextField" placeholder="Enter Text">
-          </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="onAddText()">Add</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Text</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="TextField">Text</label>
+                        <input type="text" class="form-control" id="TextField" placeholder="Enter Text">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="onAddText()">Add</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
     <div class="modal fade" tabindex="-1" role="dialog" id="ImagesModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Select Image</h4>
-          </div>
-          <div class="modal-body">
-           <div class="form-group">
-            <div class="imageSliderWrapper">
-                <div class="owl-carousel owl-theme">
-                    
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Select Image</h4>
                 </div>
-            </div>
-          
-          </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="onAddImageText()">Add</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="imageSliderWrapper">
+                            <div class="owl-carousel owl-theme">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="onAddImageText()">Add</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -393,57 +402,44 @@
         var cellSizeHeight = 26;
         var grid = [];
         var centerPoints = [];
-
+        var ImageArray;
         class Cell {
-          constructor(x, y) {
-            this.x = x;
-            this.y = y;
-            this.z = 0;
-            this.width = cellSizeWidth;
-            this.height = cellSizeHeight;
-            this.c = "#d7d8d9";
-            this.center = { x: this.x + this.width / 2 - canvas.width/2, y: (this.y + this.height / 2 - canvas.height/2) + 1};
-          }
-          draw() {
-            ctx.strokeStyle = this.c;
-            ctx.lineWidth  = 0.5;
-            ctx.strokeRect(this.x, this.y, this.width, this.height);
-          }
-          createArray() {
-            centerPoints.push({'x': this.center.x, 'y': this.z, 'z': this.center.y})
-          }
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.z = 0;
+                this.width = cellSizeWidth;
+                this.height = cellSizeHeight;
+                this.c = "#d7d8d9";
+                this.center = { x: this.x + this.width / 2 - canvas.width / 2, y: (this.y + this.height / 2 - canvas.height / 2) + 1 };
+            }
+            draw() {
+                ctx.strokeStyle = this.c;
+                ctx.lineWidth = 0.5;
+                ctx.strokeRect(this.x, this.y, this.width, this.height);
+            }
+            createArray() {
+                centerPoints.push({ 'x': this.center.x, 'y': this.z, 'z': this.center.y })
+            }
         }
 
         function createGrid() {
-          for (var y = 0; y < canvas.height; y += cellSizeHeight) {
-            for (var x = 0; x < canvas.width; x += cellSizeWidth) {
-              grid.push(new Cell(x, y));
+            for (var y = 0; y < canvas.height; y += cellSizeHeight) {
+                for (var x = 0; x < canvas.width; x += cellSizeWidth) {
+                    grid.push(new Cell(x, y));
+                }
             }
-          }
         }
         createGrid();
 
         function drawGrid() {
-          for (var i = 0; i < grid.length; i++) {
-            grid[i].draw();
-            grid[i].createArray();
-          }
+            for (var i = 0; i < grid.length; i++) {
+                grid[i].draw();
+                grid[i].createArray();
+            }
         }
         drawGrid();
 
-        console.log(centerPoints)
-
-        
-
-        //Taha End
-        /*var canvas = document.getElementById("terminalScreen");
-        var ctx = canvas.getContext("2d");
-        var cw = canvas.width;
-        var ch = canvas.height;
-        var activeAction = null;
-        var activeScreenUID = "";
-        var rightClickedScreen = "";
-        */
         var ScreenID = 0;
         function reOffset() {
             var BB = canvas.getBoundingClientRect();
@@ -464,47 +460,15 @@
         var newRect;
         var atmBtnID = "";
 
+        var DummyObj = [];
+        var tempObj = {};
+
         $("#terminalScreen").mousedown(function (e) { handleMouseDown(e); });
         $("#terminalScreen").mousemove(function (e) { handleMouseMove(e); });
         $("#terminalScreen").mouseup(function (e) { handleMouseUp(e); });
         $("#terminalScreen").mouseout(function (e) { handleMouseOut(e); });
 
-        /*function handleMouseDown(e) {
-            if (activeAction != "draw") {
-                return;
-            }
-            // tell the browser we're handling this event
-            e.preventDefault();
-            e.stopPropagation();
-
-            startX = parseInt(e.clientX - offsetX);
-            startY = parseInt(e.clientY - offsetY);
-
-            // Put your mousedown stuff here
-            isDown = true;
-        }
-
-        function handleMouseUp(e) {
-            // tell the browser we're handling this event
-            e.preventDefault();
-            e.stopPropagation();
-
-            mouseX = parseInt(e.clientX - offsetX);
-            mouseY = parseInt(e.clientY - offsetY);
-
-            // Put your mouseup stuff here
-            isDown = false;
-
-            if (activeAction == "draw") {
-                if (!willOverlap(newRect)) {
-                    //rects.push(newRect);
-                    atmScreens[activeScreenUID].rect = newRect;
-                }
-            }
-            drawAll();
-        }*/
-
-        /*function drawAll() {
+        function drawAll() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.lineWidth = 1;
             ctx.fillStyle = "rgba(10, 253, 153, 0.21)";
@@ -523,42 +487,7 @@
                     $(".atmBtn[btnid='b" + i + "']").addClass("btnProgrammed");
                 }
             }
-        }*/
-
-       /* function handleMouseOut(e) {
-            // tell the browser we're handling this event
-            e.preventDefault();
-            e.stopPropagation();
-
-            mouseX = parseInt(e.clientX - offsetX);
-            mouseY = parseInt(e.clientY - offsetY);
-
-            // Put your mouseOut stuff here
-            isDown = false;
         }
-
-        function handleMouseMove(e) {
-            if (!isDown) { return; }
-            // tell the browser we're handling this event
-            e.preventDefault();
-            e.stopPropagation();
-
-            mouseX = parseInt(e.clientX - offsetX);
-            mouseY = parseInt(e.clientY - offsetY);
-
-            newRect = {
-                left: Math.min(startX, mouseX),
-                right: Math.max(startX, mouseX),
-                top: Math.min(startY, mouseY),
-                bottom: Math.max(startY, mouseY),
-            }
-
-            drawAll();
-            ctx.strokeStyle = "lightgray";
-            ctx.lineWidth = 3;
-            ctx.strokeRect(startX, startY, mouseX - startX, mouseY - startY);
-
-        }*/
 
         function willOverlap(newRect) {
 
@@ -592,27 +521,22 @@
             return (isOverlapping);
         }
 
-        function onclick_StartDrawing() {
-            if ($(".btn_Draw").hasClass("active")) {
-                activeAction = "";
-                $(".btn_Draw").removeClass("active");
-                $(".canvasContainer").removeClass("drawing");
-                return;
+        function onclick_ToggleGrid() {
+            if ($(".btn_ToggleGrid").val() == "Show Grid") {
+                drawGrid();
+                $(".btn_ToggleGrid").val("Hide Grid");
             }
-            activeAction = "draw";
-            $(".btn_Draw").addClass("active");
-            $(".canvasContainer").addClass("drawing");
+            else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                $(".btn_ToggleGrid").val("Show Grid");
+            }
         }
 
         function onclick_AddBackground() {
             $("#UploadFile").trigger("click");
         }
 
-        function onChange_UploadFile(event) {
-            //var img = new Image();
-            //         img.onload = draw;
-            //         img.onerror = failed;
-            //         img.src = URL.createObjectURL(document.getElementById("UploadFile").files[0]);
+        /*function onChange_UploadFile(event) {
 
             var file = document.getElementById("UploadFile").files[0];
             var validImageTypes = ["image/gif", "image/jpeg", "image/png"];
@@ -628,7 +552,8 @@
             atmScreens[activeScreenUID].url = getImagePath;
             atmScreens[activeScreenUID].filename = file.name;
             $('.canvasContainer, .atmScreen.active').css('background-image', 'url("' + getImagePath + '")');
-        }
+
+        }*/
 
         /*function draw() {
             //var canvas = document.getElementById('terminalScreen');
@@ -641,35 +566,62 @@
         }
 
         function onClick_AddNewScreen(e) {
-            $(e.target).before("<div class='atmScreen editableScreen'></div>");
+
+            var CodeFieldVal = "";
+            atmScreens[activeScreenUID].code = $("#CodeField").val();
+
+            const canvas_ID = document.getElementById("canvas");
+
+            //const URL = canvas_ID.toDataURL();
+            //if (atmScreens[activeScreenUID].isImageUploaded != "1") {
+            //    atmScreens[activeScreenUID].url = URL;
+            //}
+
+
+            //var currentState = $(e.target).prev().find("img").attr('id');
+            ////console.log(currentState);
+            //const img_from_canvas = document.getElementById(currentState);
+            //img_from_canvas.src = canvas_ID.toDataURL();
+
             var newScreenID = "atmSC" + new Date().getTime();
             activeScreenUID = newScreenID;
+
+            $(e.target).before("<div class='atmScreen editableScreen'><img class='imgThumbnail' id=" + activeScreenUID + "></div>");
+
             atmScreens[activeScreenUID] = {
                 url: "",
                 rect: {},
                 buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
-                filename: ""
+                filename: "",
+                code: ""
             }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+
+
+            $("#CodeField").val("").html("");
             $(e.target).prev().eq(0).attr("uid", newScreenID).trigger("click");
             //drawAll();
             ScreenID++;
-            if(ScreenID == 1){
+            if (ScreenID == 1) {
                 $("#CodeField").append("\n");
             }
             var Length = 3;
             ScreenID = ScreenID.toString();
             while (ScreenID.length < Length) ScreenID = "0" + ScreenID;
-
-            $("#CodeField").append(ScreenID);
-            $("#CodeField").append("\n");
-        }            
+            CodeFieldVal += ScreenID;
+            CodeFieldVal += "\n";
+            $("#CodeField").val(CodeFieldVal);
+        }
 
         $(function () {
+
             $(".atmScreens").sortable({
                 items: "div:not(.addNew)"
             });
             $(".atmScreens").disableSelection();
-            
+
             $(document).on("click", "#AddCursorBtn", function (e) {
                 $('#CursorModal').modal('show');
             });
@@ -679,21 +631,96 @@
             });
 
             $(document).on("click", "#ClearScreenBtn", function (e) {
-                $("#CodeField").append("\n");
-                $("#CodeField").append("CLS");
+                var CodeFieldVal = $("#CodeField").val();
+                CodeFieldVal += "\n";
+                CodeFieldVal += "CLS";
+                $("#CodeField").val(CodeFieldVal);
+
             });
-            
 
             $(document).on("click", "#AddImageBtn", function (e) {
                 $('#ImagesModal').modal('show');
             });
 
             $(document).on("click", ".atmScreen.editableScreen", function (e) {
+
+                $("#CodeField").val("");
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawGrid();
+
                 $(".atmScreen.editableScreen").attr("title", "Click to edit this screen").removeClass("active");
                 $(e.target).addClass("active").attr("title", "Active Screen");
+
                 activeScreenUID = $(e.target).attr("uid");
+
+                //for (key in atmScreens[activeScreenUID].code.split(",")) {
+                //    if (atmScreens[activeScreenUID].code.split(",")[key].includes("SET")) {
+                //        console.log(key);
+                //        console.log(atmScreens[activeScreenUID].code.split(",")[key]);
+                //    }
+                //}
+
+                Object.values(atmScreens[activeScreenUID].code.split(",")).forEach((value, index) => {
+
+                    if ((value).includes("SET")) {
+
+                        // Rendeing Image on Canvas
+                        if (atmScreens[activeScreenUID].code.split(",")[index + 1].includes("P2")) {
+                            var TempVar = atmScreens[activeScreenUID].code.split(",")[index + 1];
+
+                            var str = atmScreens[activeScreenUID].code.split(",")[index];
+                            var after = str.substring(str.indexOf(' ') + 1);
+                            var Coordinates = after.split("");
+
+                            var Xaxis = CoordinateMapX[Coordinates[0]];
+                            var Y_Position = CoordinateMapX[Coordinates[0]];
+
+                            Object.values(TempVar.split(" ")).forEach((value, index) => {
+                                
+                                if ((value).includes("P2")) {
+                                    base_image = new Image();
+                                    base_image.src = 'http://localhost/StatesMaster/img/screens/' + TempVar.split(" ")[index + 1] + '.jpg';
+                                    base_image.onload = function () {
+                                        ctx.drawImage(base_image, Xaxis, Y_Position);
+                                    }
+                                }
+
+                            });
+
+                        } else {
+
+                            // Rendering Text on Canvas
+                            var str = value.split(" ")[1];
+                            var after = str.substring(str.indexOf(' ') + 1);
+                            var Coordinates = after.split("");
+
+                            var Xaxis = CoordinateMapX[Coordinates[0]];
+                            var Y_Position = CoordinateMapX[Coordinates[0]];
+                            var text = atmScreens[activeScreenUID].code.split(",")[index + 1]
+                            var myArray = text.split("");
+
+                            for (var i = 0; i < myArray.length; i++) {
+                                ctx.font = "26px Arial";
+                                ctx.fillText(myArray[i], Xaxis, Y_Position);
+                                Xaxis = Xaxis + 20;
+                            }
+                        }
+
+                    }
+                    
+                });
+
+                for (var x = 0; x < atmScreens[activeScreenUID].code.split(",").length; x++) {
+                    //onAddText
+                    var CodeFieldVal = $("#CodeField").val();
+                    CodeFieldVal += atmScreens[activeScreenUID].code.split(",")[x];
+                    CodeFieldVal += "\n";
+                    $("#CodeField").val(CodeFieldVal);
+                }
+
                 $('.canvasContainer').css('background-image', 'url("' + atmScreens[activeScreenUID].url + '")');
-                //drawAll();
+
             });
 
             $(document).on("click", function (e) {
@@ -734,19 +761,81 @@
                 //drawAll();
             });
 
-            var newScreenID = "atmSC" + new Date().getTime();
+            //var newScreenID = "atmSC" + new Date().getTime();
+            //$(".imgThumbnail").attr("id", newScreenID);
+            //$(".atmScreen.active").eq(0).attr("uid", newScreenID);
 
-            $(".atmScreen.active").eq(0).attr("uid", newScreenID);
-            activeScreenUID = newScreenID;
-            atmScreens[activeScreenUID] = {
-                url: "",
-                rect: {},
-                buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
-                filename: ""
-            }
+            //activeScreenUID = newScreenID;
+            //atmScreens[activeScreenUID] = {
+            //    url: "",
+            //    rect: {},
+            //    buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
+            //    filename: "",
+            //    code: "",
+            //    isImageUploaded: ""
+            //}
 
             GetAllImagesList();
             //drawAll();
+
+            $.get("./RawData/o2screens.txt", function (response) {
+                var ind = 0;
+                for (var x = 0; x < response.split("\n").length; x++) {
+                    if (response.split("\n")[x].trim() == "FS") {
+                        ind = 0;
+                        DummyObj.push(tempObj);
+                        tempObj = {};
+                    } else {
+                        tempObj[ind] = response.split("\n")[x].trim();
+                        ind += 1;
+                    }
+                }
+
+                //console.log(DummyObj);
+
+                var SanitizedData = [];
+                var FinalObj = [];
+
+
+                for (var y = 0; y < DummyObj.length; y++) {
+                    for (key in DummyObj[y]) {
+                        //console.log(key);
+                        if (!DummyObj[y][key].includes("SCREENS") && !DummyObj[y][key].includes("{         ") && !DummyObj[y][key].includes("{{") && !DummyObj[y][key].includes("{ ")) {
+                            if (DummyObj[y][key] != "" && DummyObj[y][key] != " " && DummyObj[y][key].substring(0, 1) != "{") {
+                                //console.log(DummyObj[y][key]);
+                                SanitizedData.push(DummyObj[y][key].replace("             {SCREEN NUMBER", ""));
+                            }
+                        }
+                    }
+                    SanitizedData.push("FS");
+                }
+
+                var TempObj = [];
+                var Counter = 0;
+
+                for (var z = 0; z < SanitizedData.length; z++) {
+                    if (SanitizedData[z] != "FS") {
+                        TempObj[Counter] += SanitizedData[z];
+                        TempObj[Counter] += "\n";
+                    }
+                    if (SanitizedData[z] == "FS") {
+                        Counter++;
+                    }
+                }
+
+                $('.ui-sortable').html("");
+
+                for (var w = 0; w < TempObj.length; w++) {
+                    var TempVar = TempObj[w].replace("undefined", "").split("\n");
+                    RenderDynamicScreens(TempVar, w);
+                }
+
+                setTimeout(function () {
+                    $(".editableScreen").first().trigger("click");
+                }, 500)
+
+            })
+
         });
 
         function onClick_RemoveScreen() {
@@ -762,17 +851,21 @@
             }
         }
 
-        function onAddCursorPoint(){
+        function onAddCursorPoint() {
+
             var Row = $("#CursorRow").val();
             var Column = $("#CursorColumn").val();
-            $("#CodeField").append("\n");
-            $("#CodeField").append("SET " + Row + Column);
+            var CodeFieldVal = $("#CodeField").val();
+            CodeFieldVal += "\n";
+            CodeFieldVal += "SET " + Row + Column;
+            $("#CodeField").val(CodeFieldVal);
             $('#CursorModal').modal('hide');
+
         }
 
-        function GetLastLine(){
+        function GetLastLine() {
             var content = $("#CodeField").val();
-            var lastLine = content.substr(content.lastIndexOf("\n")+1);
+            var lastLine = content.substr(content.lastIndexOf("\n") + 1);
             return lastLine;
         }
 
@@ -783,39 +876,46 @@
             return Coordinates;
         }
 
-        function RenderTextParam(Text, X_Position, Y_Position){
+        function RenderTextParam(Text, X_Position, Y_Position) {
             var Xaxis = X_Position;
             var text = Text
             var myArray = text.split("");
-            for(var i=0; i<myArray.length; i++){
+            for (var i = 0; i < myArray.length; i++) {
                 ctx.font = "26px Arial";
-                ctx.fillText(myArray[i],Xaxis,Y_Position);
+                ctx.fillText(myArray[i], Xaxis, Y_Position);
                 Xaxis = Xaxis + 20;
             }
         }
 
-        function onAddImageText(){
-            var ImageID = $("#ImgID").val()
-            $("#CodeField").append("\n");
-            $("#CodeField").append("ESC P2 " + ImageID.substring(1, 3) + " ESC" );
+        function onAddImageText() {
+            var CodeFieldVal = $("#CodeField").val();
+            var ImageID = $("#ImgID").val();
+            CodeFieldVal += "\n";
+            CodeFieldVal += "ESC P2 " + ImageID.substring(1, 3) + " ESC";
+            $("#CodeField").val(CodeFieldVal);
             $('#ImagesModal').modal('hide');
             $('.canvasContainer, .atmScreen.active').css('background-image', 'url("' + $("#ImgSrc").val() + '")');
-        
-            
+
+            atmScreens[activeScreenUID].url = $("#ImgSrc").val();
+            atmScreens[activeScreenUID].filename = $("#ImgID").val();
+            atmScreens[activeScreenUID].isImageUploaded = "1";
+
         }
 
-        function onAddText(){
+        function onAddText(data) {
             var Text = $("#TextField").val();
             var LastLine = GetLastLine()
             var Coordinates = GetCursorPoint(LastLine);
-            RenderTextParam(Text ,CoordinateMapX[Coordinates[0]] ,CoordinateMapY[Coordinates[1]] )
-            Text = Text.replace(/ /g,"~");
-            $("#CodeField").append("\n");
-            $("#CodeField").append(Text);
+            var CodeFieldVal = $("#CodeField").val();
+            RenderTextParam(Text, CoordinateMapX[Coordinates[0]], CoordinateMapY[Coordinates[1]])
+            Text = Text.replace(/ /g, "~");
+            CodeFieldVal += "\n";
+            CodeFieldVal += Text;
+            $("#CodeField").val(CodeFieldVal);
             $('#TextModal').modal('hide');
         }
 
-        function GetAllImagesList(){
+        function GetAllImagesList() {
             $(".owl-carousel").html("");
             var dir = "img/";
             var fileextension = ".jpg";
@@ -824,34 +924,33 @@
                 url: dir,
                 success: function (data) {
                     //List all .png file names in the page
-                    console.log(data);
                     $(data).find("a:contains(" + fileextension + ")").each(function () {
-                       console.log(this)
+
                         var filename = this.href.replace(window.location.host, "").replace("http://", "");
                         var n = filename.lastIndexOf('/');
                         var TrimmedFileName = filename.substring(n + 1);
                         var tempURL = "http://localhost:81";
-                       
+
                         //$(".owl-carousel").append("<div><a target='_blank' href='"+ tempURL + filename + "'>" +
-                         $(".owl-carousel").append("<div><div class='ATMImg' onclick='OnClickSelectImage(event)' uid="+ TrimmedFileName +">" +
-                         "<img src='"+ tempURL + filename + "'style='width:150px'></a>"+
-                         "<label>" + TrimmedFileName +  "</label>" +
-                         "</div>");
-                              
-                            
+                        $(".owl-carousel").append("<div><div class='ATMImg' onclick='OnClickSelectImage(event)' uid=" + TrimmedFileName + ">" +
+                            "<img src='" + tempURL + filename + "'style='width:150px'></a>" +
+                            "<label>" + TrimmedFileName + "</label>" +
+                            "</div>");
+
+
                     });
                     $('.owl-carousel').owlCarousel({
-                        margin:10,
-                        nav:false,
-                        responsive:{
-                            0:{
-                                items:3
+                        margin: 10,
+                        nav: false,
+                        responsive: {
+                            0: {
+                                items: 3
                             },
-                            600:{
-                                items:3
+                            600: {
+                                items: 3
                             },
-                            1000:{
-                                items:3
+                            1000: {
+                                items: 3
                             }
                         }
                     })
@@ -859,15 +958,37 @@
             });
         }
 
-        function OnClickSelectImage(event){
+        function OnClickSelectImage(event) {
 
             $("#ImgID").val($(event.target).parent().attr("uid"));
             $("#ImgSrc").val($(event.target).attr("src"));
 
             $(".ATMImg").removeClass("ActiveImg");
             $(event.target).parent().addClass("ActiveImg");
-           
+
+                            }
+
+        function RenderDynamicScreens(data, index) {
+
+            var FirstIndex = data[0];
+            FirstIndex = $.trim(FirstIndex);
+
+            var newScreenID = "atmSC" + FirstIndex + index;
+
+            atmScreens[newScreenID] = {
+                url: "",
+                rect: {},
+                buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
+                filename: "",
+                code: data.join(","),
+                isImageUploaded: ""
+            }
+
+            $('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen editableScreen'>Screen " + index+"</div>");
+
+
         }
+
         var CoordinateMapX = {
             "@": 0,
             "A": 20,
@@ -896,11 +1017,11 @@
             "8": 480,
             "9": 500,
             ":": 520,
-            ";": 540, 
-            "<": 560, 
-            "=": 580, 
-            ">": 600, 
-            "?": 620, 
+            ";": 540,
+            "<": 560,
+            "=": 580,
+            ">": 600,
+            "?": 620,
         }
 
         var CoordinateMapY = {
