@@ -8,7 +8,7 @@ var RawExportedData = [];
 var TempArray = [];
 var reader = new TxtReader();
 var DataObj;
-var SplashTimer = 1000;
+var SplashTimer = 4000;
 
 var TransactionTypes = [
     {
@@ -833,6 +833,18 @@ $(document).ready(function () {
             if ($(AllInputs[x]).parent().text().includes("FDK D")) {
                 $('.enlarged-image-wrapper .btnD').text("D: " + $(AllInputs[x]).parent().attr("id"));
             }
+            if ($(AllInputs[x]).parent().text().includes("FDK F")) {
+                $('.enlarged-image-wrapper .btnD').text("F: " + $(AllInputs[x]).parent().attr("id"));
+            }
+            if ($(AllInputs[x]).parent().text().includes("FDK G")) {
+                $('.enlarged-image-wrapper .btnD').text("G: " + $(AllInputs[x]).parent().attr("id"));
+            }
+            if ($(AllInputs[x]).parent().text().includes("FDK H")) {
+                $('.enlarged-image-wrapper .btnD').text("H: " + $(AllInputs[x]).parent().attr("id"));
+            }
+            if ($(AllInputs[x]).parent().text().includes("FDK I")) {
+                $('.enlarged-image-wrapper .btnD').text("I: " + $(AllInputs[x]).parent().attr("id"));
+            }
         }
 
         $("#selectedNode").fadeIn(50);
@@ -1197,7 +1209,7 @@ $(document).ready(function () {
             $("#NetWorkAreaWrapper").fadeIn();
             $('.splash-wrapper').fadeOut(350);
             localStorage.clear();
-            SplashTimer = 1000;
+            SplashTimer = 4000;
         }
 
         $('.splash-wrapper').fadeOut(350);

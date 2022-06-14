@@ -1466,7 +1466,7 @@
 
             setTimeout(function () {
                 $('.splash-wrapper').fadeOut(350);
-            }, 1000)
+            }, 4000)
 
         });
 
@@ -1513,7 +1513,7 @@
             var text = Text
             var myArray = text.split("");
             for (var i = 0; i < myArray.length; i++) {
-                ctx.font = "22px Arial";
+                ctx.font = "20px Arial";
                 ctx.fillText(myArray[i], Xaxis, Y_Position);
                 Xaxis = Xaxis + 20;
             }
@@ -1523,10 +1523,10 @@
             var CodeFieldVal = $("#CodeField").val();
             var ImageID = $("#ImgID").val();
             CodeFieldVal += "\n";
-            CodeFieldVal += "ESC P2 " + ImageID.substring(1, 3) + " ESC";
+            CodeFieldVal += "ESC P2 " + ImageID.replace(".jpg", "") + " ESC";
             $("#CodeField").val(CodeFieldVal);
             $('#ImagesModal').modal('hide');
-            $('.canvasContainer, .atmScreen.active').css('background-image', 'url("' + $("#ImgSrc").val() + '")');
+            //$('.canvasContainer, .atmScreen.active').css('background-image', 'url("' + $("#ImgSrc").val() + '")');
 
             atmScreens[activeScreenUID].url = $("#ImgSrc").val();
             atmScreens[activeScreenUID].filename = $("#ImgID").val();
@@ -1591,6 +1591,8 @@
         }
 
         function OnClickSelectImage(event) {
+
+            console.log($(event.target).parent().attr("uid"));
 
             $("#ImgID").val($(event.target).parent().attr("uid"));
             $("#ImgSrc").val($(event.target).attr("src"));
