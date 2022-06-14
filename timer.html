@@ -357,7 +357,7 @@
             left: 1rem;
             background: #1E88E5;
             color: #fff;
-            padding: 10px 1rem;
+            padding: 0 1rem;
             border-radius: 5px;
             vertical-align: middle;
             font-size: 20px;
@@ -365,6 +365,9 @@
             box-shadow: 0 0px 3px 3px rgb(0 0 0 / 5%);
             transition: all ease-in-out 0.25s;
             z-index: 999;
+            font-size: 16px;
+            height: 49px;
+            line-height: 49px;
         }
 
             .add-new-state-wrapper .material-symbols-outlined {
@@ -934,8 +937,8 @@
         </div>
     </div>
 
-    <div class="add-new-state-wrapper" onclick="GenerateNDCObject(event)">
-        <span class="material-symbols-outlined add-node-icon"> add_box </span> Generate
+    <div class="add-new-state-wrapper" onclick="GenerateNDCObject(event)" style="display: none;">
+        Generate Data <span class="material-symbols-outlined"> settings </span>
     </div>
 
     <div class="navigation-wrapper">
