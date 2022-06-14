@@ -8,6 +8,7 @@ var RawExportedData = [];
 var TempArray = [];
 var reader = new TxtReader();
 var DataObj;
+var SplashTimer = 1000;
 
 var TransactionTypes = [
     {
@@ -502,6 +503,7 @@ if (JSON.parse(localStorage.getItem("FileParsedData")) == null) {
     ]
 } else {
     var DataObj = JSON.parse(localStorage.getItem("FileParsedData"));
+    SplashTimer = 0;
 }
 
 var SanitizedObj = [];
@@ -1181,6 +1183,7 @@ $(document).ready(function () {
             $("#NetWorkAreaWrapper").fadeIn();
             $('.splash-wrapper').fadeOut(350);
             localStorage.clear();
+            SplashTimer = 1000;
         }
 
         $('.splash-wrapper').fadeOut(350);
@@ -1216,6 +1219,6 @@ $(document).ready(function () {
             }
         });
 
-    }, 1000)
+    }, SplashTimer)
 
 })

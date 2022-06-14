@@ -390,14 +390,18 @@ class StatesService{
          * Accessing Z state entries may be perfromed by state.entries[i] - to get i-th table entry as it's written in NDC's spec. 
          * E.g. state.entries[1] is 'Z', state.entry[4] is "Z state table entry 4"
          */
+
               parsed.set('description', 'Extension State');
 
-              parsed.set('buffer_id1', this.getEntry(data, 3));
-              parsed.set('buffer_id2', this.getEntry(data, 4));
-              parsed.set('buffer_id1_greater_buffer_id2_next_num', this.getEntry(data, 5));
-              parsed.set('buffer_id1_lesser_buffer_id2_next_num', this.getEntry(data, 6));
-              parsed.set('reserved1', this.getEntry(data, 8));
-              parsed.set('reserved2', this.getEntry(data, 9));
+              parsed.set('buffer_id1', this.getEntry(data, 2));
+              parsed.set('buffer_id2', this.getEntry(data, 3));
+              parsed.set('buffer_id1_greater_buffer_id2_next_num', this.getEntry(data, 4));
+              parsed.set('buffer_id1_lesser_buffer_id2_next_num', this.getEntry(data, 5));
+              parsed.set('reserved1', this.getEntry(data, 6));
+              parsed.set('reserved2', this.getEntry(data, 7));
+              parsed.set('reserved3', this.getEntry(data, 8));
+              parsed.set('reserved3', this.getEntry(data, 8));
+              parsed.set('reserved4', this.getEntry(data, 9));
 
               addStateLinks(parsed, ['buffer_id1_greater_buffer_id2_next_num', 'buffer_id1_lesser_buffer_id2_next_num']);
               break;
