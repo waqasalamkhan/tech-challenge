@@ -771,22 +771,7 @@
                 //drawAll();
             });
 
-            //var newScreenID = "atmSC" + new Date().getTime();
-            //$(".imgThumbnail").attr("id", newScreenID);
-            //$(".atmScreen.active").eq(0).attr("uid", newScreenID);
-
-            //activeScreenUID = newScreenID;
-            //atmScreens[activeScreenUID] = {
-            //    url: "",
-            //    rect: {},
-            //    buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
-            //    filename: "",
-            //    code: "",
-            //    isImageUploaded: ""
-            //}
-
             GetAllImagesList();
-            //drawAll();
 
             $.get("./RawData/o2screens.txt", function (response) {
                 var ind = 0;
@@ -800,8 +785,6 @@
                         ind += 1;
                     }
                 }
-
-                //console.log(DummyObj);
 
                 var SanitizedData = [];
                 var FinalObj = [];
@@ -931,7 +914,7 @@
 
         function GetAllImagesList() {
             $(".owl-carousel").html("");
-            var dir = "img/";
+            var dir = "img/screens";
             var fileextension = ".jpg";
             $.ajax({
                 //This will retrieve the contents of the folder if the folder is configured as 'browsable'
@@ -943,7 +926,7 @@
                         var filename = this.href.replace(window.location.host, "").replace("http://", "");
                         var n = filename.lastIndexOf('/');
                         var TrimmedFileName = filename.substring(n + 1);
-                        var tempURL = "http://localhost:81";
+                        var tempURL = "http://localhost/";
 
                         //$(".owl-carousel").append("<div><a target='_blank' href='"+ tempURL + filename + "'>" +
                         $(".owl-carousel").append("<div><div class='ATMImg' onclick='OnClickSelectImage(event)' uid=" + TrimmedFileName + ">" +
