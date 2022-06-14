@@ -177,16 +177,29 @@
                 border-style: dashed;
                 text-align: center;
                 /* color: rgba(255 255 255 / 68%); */
-                border: 3px solid rgb(141 141 141 / 74%);
+                border: 3px solid #fff;
                 border-radius: 5px;
                 line-height: 83px;
                 font-size: 16px;
-                background: #Fff;
+                background: #fff;
                 color: #222;
+                position: relative;
             }
+                .atmScreen.addNew .material-symbols-outlined {
+                    color: #AED581;
+                    font-size: 5rem;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
 
             .atmScreen.active {
-                border-color: green;
+                background: #1E88E5;
+                color: #fff;
+                border: 3px solid #fff;
             }
 
         .genericContextMenu {
@@ -1626,7 +1639,7 @@
 
 
             //$('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen newScreen editableScreen'>Add Screen</div>");
-            $('.ui-sortable').append('<div class="atmScreen addNew" uid="' + newScreenID + '" onclick="onClick_AddNewScreen(event)" title ="Add New Screen">Add Screen</div>');
+            $('.ui-sortable').append('<div class="atmScreen addNew" uid="' + newScreenID + '" onclick="onClick_AddNewScreen(event)" title ="Add Screen"><span class="material-symbols-outlined"> add </span></div>');
                             }
 
         function RenderEditChanges() {
