@@ -29,7 +29,7 @@
 
         textarea {
             width: 68%;
-            height: 82vh;
+            height: 70vh;
             padding: 12px 20px;
             box-sizing: border-box;
             border: 2px solid #fffcfc;
@@ -488,6 +488,33 @@
                 margin-right: 5px;
             }
 
+        .save-edit-btn {
+            background: #1E88E5;
+            color: #fff;
+            padding: 0 1rem;
+            border-radius: 5px;
+            vertical-align: middle;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0px 3px 3px rgb(0 0 0 / 5%);
+            transition: all ease-in-out 0.25s;
+            z-index: 999;
+            font-size: 16px;
+            height: 49px;
+            line-height: 49px;
+            width: 68%;
+            margin: 0 0 0 10.3rem;
+            text-align:center;
+        }
+
+            .save-edit-btn .material-symbols-outlined {
+                vertical-align: middle;
+                font-size: 20px;
+                position: relative;
+                top: -2px;
+                margin-right: 5px;
+            }
+
         .splash-wrapper {
             background: #fff;
             position: fixed;
@@ -705,7 +732,7 @@
                 <li>
                     <a href="timer.html">Timer</a>
                 </li>
-                <li>
+                <li style="opacity: 0.4; pointer-events: none; background: #eee;">
                     <a href="fits.html">FITS</a>
                 </li>
             </ul>
@@ -746,6 +773,9 @@
                 <button class="ActBtn btnLeft" btnid="b4" id="AddImageBtn">Add Image<br /></button>
             </div>
             <textarea id="CodeField" name="CodeField"></textarea>
+            <div class="save-edit-btn" onclick="RenderEditChanges();">
+                Save <span class="material-symbols-outlined"> done_all </span>
+            </div>
         </div>
         <div class="drawingArea">
             <div class="atmButtonsContextMenu genericContextMenu">
@@ -820,7 +850,7 @@
                 <div class="atmScreen editableScreen active" title="Active Screen" uid="">
                     <img class="imgThumbnail">
                 </div>
-                <div class="atmScreen addNew" onclick="onClick_AddNewScreen(event)" title="Add New Screen">Add New Screen</div>
+                <div class="atmScreen addNew" onclick="onClick_AddNewScreen(event)" title="Add New Screen">Add Screen</div>
             </div>
         </div>
     </div>
@@ -1404,7 +1434,7 @@
 
                 for (var w = 0; w < FileParsedObj.length; w++) {
                     var TempVar = FileParsedObj[w].replace("undefined", "").split("\n");
-                    console.log("TempVar : ", TempVar);
+                    //console.log("TempVar : ", TempVar);
                     RenderDynamicScreens(TempVar, w, "Edit");
                     if (FileParsedObj.length - 1 == w) {
                         RenderAddNewScreen(w+1);
@@ -1470,7 +1500,7 @@
             var text = Text
             var myArray = text.split("");
             for (var i = 0; i < myArray.length; i++) {
-                ctx.font = "26px Arial";
+                ctx.font = "22px Arial";
                 ctx.fillText(myArray[i], Xaxis, Y_Position);
                 Xaxis = Xaxis + 20;
             }
@@ -1596,7 +1626,74 @@
 
 
             //$('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen newScreen editableScreen'>Add Screen</div>");
-            $('.ui-sortable').append('<div class="atmScreen addNew" uid="' + newScreenID + '" onclick="onClick_AddNewScreen(event)" title ="Add New Screen">Add New Screen</div>');
+            $('.ui-sortable').append('<div class="atmScreen addNew" uid="' + newScreenID + '" onclick="onClick_AddNewScreen(event)" title ="Add New Screen">Add Screen</div>');
+                            }
+
+        function RenderEditChanges() {
+
+            var CurrenctCodeValues = $("#CodeField").val().split("\n");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+
+            Object.values(CurrenctCodeValues).forEach((value, index) => {
+
+               
+                if (value != "" && value != " ") {
+
+                    if ((value).includes("SET")) {
+
+                        var TempVarNew = CurrenctCodeValues[index + 1];
+
+                        // Rendeing Image on Canvas
+                        if (TempVarNew.includes("P2")) {
+
+                            var TempVar = CurrenctCodeValues[index + 1];
+                            var str = CurrenctCodeValues[index];
+                            var after = str.substring(str.indexOf(' ') + 1);
+                            var Coordinates = after.split("");
+
+                            var Xaxis = CoordinateMapX[Coordinates[0]];
+                            var Y_Position = CoordinateMapY[Coordinates[0]];
+
+                            Object.values(TempVar.split(" ")).forEach((value, index) => {
+                                if ((value).includes("P2")) {
+                                    base_image = new Image();
+                                    base_image.src = 'http://localhost/StatesMaster/img/screens/' + TempVar.split(" ")[index + 1] + '.jpg';
+                                    base_image.onload = function () {
+                                        ctx.drawImage(base_image, Xaxis, Y_Position);
+                                    }
+                                }
+
+                            });
+                            atmScreens[activeScreenUID].code = $("#CodeField").val().replace(/\n/g, ',');
+
+                        } else {
+
+                            // Rendering Text on Canvas
+                            var str = value.split(" ")[1];
+                            var after = str.substring(str.indexOf(' ') + 1);
+                            var Coordinates = after.split("");
+
+                            var Xaxis = CoordinateMapX[Coordinates[0]];
+                            var Y_Position = CoordinateMapY[Coordinates[0]];
+                            var text = CurrenctCodeValues[index + 1];
+                            var myArray = text.split("");
+
+                            for (var i = 0; i < myArray.length; i++) {
+                                ctx.font = "20px Arial";
+                                ctx.fillText(myArray[i], Xaxis, Y_Position);
+                                Xaxis = Xaxis + 20;
+                            }
+
+                            atmScreens[activeScreenUID].code = $("#CodeField").val().replace(/\n/g, ',');
+                        }
+
+                    }
+
+                }
+
+            });
+
         }
 
         var CoordinateMapX = {
