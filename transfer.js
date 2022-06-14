@@ -1025,7 +1025,7 @@ $(document).ready(function () {
             for (let value of RawExportedData[z]) {
 
                 if (value[0] == "level") {
-                    $(".exported-file-data-wrapper").append("FS<div class='spacer'></div>");
+                    $(".exported-file-data-wrapper").append("<span> FS</span><div class='spacer'></div>");
                 } else if (value[0] == "states_to" || value[0] == "description") {
 
                 } else {
@@ -1110,6 +1110,20 @@ $(document).ready(function () {
 
     $('.file-upload-btn').on("click", function () {
         $("#formFile").trigger("click");
+    })
+
+    $('.export-states-file').on("click", function () {
+        var element = document.createElement('a');
+        var str = $(".exported-file-data-wrapper").text().trim().replace(/FS/g, "FS\r");
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(str));
+        element.setAttribute('download', "o2states.ndc");
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
     })
 
     $("#formFile").on("change", function () {
