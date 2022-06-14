@@ -6,18 +6,17 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <style>
-        <!--
-
         body {
             font-family: Arial;
             font-size: 1.2em;
-            background-color: lightblue;
+            background: url("img/bg-square.png") center center fixed;
         }
 
         textarea {
             width: 68%;
-            height: 94vh;
+            height: 82vh;
             padding: 12px 20px;
             box-sizing: border-box;
             border: 2px solid #fffcfc;
@@ -27,6 +26,8 @@
             font-size: 16px;
             resize: none;
             font-family: monospace;
+            border-radius: 5px;
+            box-shadow: 0 0px 3px 3px rgb(0 0 0 / 3%);
         }
 
         .ActionButtons {
@@ -40,11 +41,17 @@
             .ActionButtons .ActBtn {
                 width: 100%;
                 height: 52px;
-                background: rgba(23, 172, 172, 1);
-                color: white;
-                border: 1px solid rgba(0, 0, 0, 0.53);
-                cursor: pointer;
                 margin: 5px auto;
+                background: #1E88E5;
+                color: #fff;
+                padding: 10px 1rem;
+                border-radius: 5px;
+                vertical-align: middle;
+                cursor: pointer;
+                box-shadow: 0 0px 3px 3px rgb(0 0 0 / 5%);
+                transition: all ease-in-out 0.25s;
+                z-index: 999;
+                border: none;
             }
 
         canvas#terminalScreen {
@@ -90,19 +97,17 @@
             float: left;
         }
 
-        .drawingButtonsPanel,
-        .drawingArea,
-        .atmScreens {
+        .drawingButtonsPanel, .drawingArea, .atmScreens {
             width: 952px;
-            /*margin: 5px auto;*/
-            background-color: #6f7f8d;
+            /* margin: 5px auto; */
+            background-color: #0000001a;
             float: right;
-            border: 1px dashed rgba(255, 255, 255, 0.6);
+            border: 1px dashed rgb(112 107 107 / 60%);
             text-align: center;
             position: relative;
-            z-index: 999;
+            border-radius: 5px;
+            box-shadow: 0 0px 3px 3px rgb(0 0 0 / 3%);
         }
-
 
         .atmButtons,
         .canvasContainer {
@@ -148,23 +153,16 @@
             cursor: pointer;
             vertical-align: top;
             box-sizing: border-box;
-            z-index: 999;
-            line-height: 83px;
-            color: #222;
-            background: #fff;
-            font-size: 14px;
-        }
-        .newScreen {
-            background: rgba(255,255,255,0.3);
-            color: #222;
+            border-radius: 5px;
         }
 
-        .atmScreen.addNew {
-            border-style: dashed;
-            text-align: center;
-            padding-top: 20px;
-            color: rgba(255 255 255 / 68%);
-        }
+            .atmScreen.addNew {
+                border-style: dashed;
+                text-align: center;
+                padding-top: 20px;
+                /* color: rgba(255 255 255 / 68%); */
+                border: 3px solid rgb(141 141 141 / 74%);
+            }
 
             .atmScreen.active {
                 border-color: green;
@@ -184,6 +182,7 @@
             text-align: left;
             line-height: 15px;
             display: none;
+            z-index: 9999;
         }
 
         .atmScreensContextMenu:hover {
@@ -212,68 +211,400 @@
 
         .imgThumbnail {
             width: 100px;
-            z-index: -999;
         }
-        .atmButtons {
-            display: none;
+
+        .horizontal-points {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-left: 103px;
         }
+
+        .horizontal-points {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-left: 103px;
+        }
+
+        .points-box {
+            height: 26px;
+            width: 20px;
+            color: #000;
+            line-height: 26px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .vertical-points {
+            display: inline-block;
+            padding-right: 2px;
+        }
+
+        .vertical-points-box {
+            height: 26px;
+            width: 20px;
+            color: #000;
+            line-height: 26px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .horizontal-points {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-left: 168px;
+            margin-bottom: 6px;
+        }
+
+        .navigation-wrapper {
+            position: unset;
+            top: 1rem;
+            left: 0;
+            right: 0;
+            margin: 25px auto;
+            padding: 0;
+            border-radius: 0;
+            vertical-align: middle;
+            font-size: 20px;
+            z-index: 999;
+            height: 51px;
+            line-height: 50px;
+            background: rgba(255,255,255,1);
+            border: 1px solid #eee;
+            border-radius: 5px;
+            max-width: 375px;
+            box-shadow: 0 0px 3px 3px rgb(0 0 0 / 3%);
+            transition: all ease-in-out 0.25s;
+            z-index: 999;
+        }
+
+
+
+            .navigation-wrapper ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+                .navigation-wrapper ul li {
+                    float: left;
+                    border-right: 1px solid #eee;
+                }
+
+                    .navigation-wrapper ul li:last-child {
+                        border-right: 0;
+                    }
+
+                    .navigation-wrapper ul li a {
+                        font-size: 18px;
+                        color: #212529;
+                        padding: 0 20px;
+                        height: 49px;
+                        line-height: 49px;
+                        display: inline-block;
+                        vertical-align: top;
+                    }
+
+                        .navigation-wrapper ul li a.active {
+                            font-size: 18px;
+                            color: #fff;
+                            background: #1E88E5;
+                        }
+
+
+        .headerBox {
+            position: relative;
+        }
+
+            .headerBox > button {
+                position: absolute;
+                left: 20px;
+                background: #1E88E5;
+                color: #fff;
+                padding: 10px 1rem;
+                border-radius: 5px;
+                vertical-align: middle;
+                font-size: 20px;
+                cursor: pointer;
+                box-shadow: 0 0px 3px 3px rgb(0 0 0 / 5%);
+                transition: all ease-in-out 0.25s;
+                z-index: 999;
+                border: none;
+                width: 140px;
+            }
+
+        .atmScreensWrapper {
+            position: relative;
+            float: right;
+        }
+
+        .read-a-file-area {
+            text-align: center;
+            position: relative;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            z-index: 9999;
+        }
+
+            .read-a-file-area .file-area {
+                position: relative;
+            }
+
+                .read-a-file-area .file-area .form-control {
+                    width: 300px;
+                    margin: 2.5rem auto;
+                }
+
+                .read-a-file-area .file-area .file-upload-btn {
+                    position: absolute;
+                    top: 50%;
+                    -webkit-transform: translateY(-50%);
+                    transform: translateY(-50%);
+                    width: 300px;
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    background: #222;
+                    border-radius: 4px;
+                    height: 50px;
+                    font-size: 16px;
+                    line-height: 50px;
+                    color: #fff;
+                    cursor: pointer;
+                }
+
+                .read-a-file-area .file-area .progress {
+                    width: 300px;
+                    /* margin: 1rem auto; */
+                    position: absolute;
+                    top: 50%;
+                    -webkit-transform: translateY(-50%);
+                    transform: translateY(-50%);
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    height: 50px;
+                    z-index: 100;
+                    border-radius: 4px;
+                }
+
+                    .read-a-file-area .file-area .progress .progress-bar {
+                        background-color: #2765c7;
+                    }
+
+                    .read-a-file-area .file-area .progress .progress-text {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        color: #fff;
+                        font-size: 16px;
+                        top: 50%;
+                        -webkit-transform: translateY(-50%);
+                        transform: translateY(-50%);
+                        margin: 0 auto;
+                        z-index: 150;
+                        font-weight: 500;
+                    }
+
+                        .read-a-file-area .file-area .progress .progress-text span {
+                            font-size: 24px;
+                            vertical-align: middle;
+                            margin-right: 5px;
+                            position: relative;
+                            top: -1px;
+                            -webkit-animation: rotation 2s infinite linear;
+                            animation: rotation 2s infinite linear;
+                        }
+
+            .read-a-file-area .inner {
+                padding: 4rem 2rem;
+            }
+
+                .read-a-file-area .inner span {
+                    font-size: 6.5rem;
+                    margin-bottom: 0.5rem;
+                }
+
+                .read-a-file-area .inner div {
+                    font-size: 1.8rem;
+                    font-weight: 300;
+                }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
+        }
+
+        .add-new-state-wrapper {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background: #1E88E5;
+            color: #fff;
+            padding: 10px 2rem;
+            border-radius: 5px;
+            vertical-align: middle;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0px 3px 3px rgb(0 0 0 / 5%);
+            transition: all ease-in-out 0.25s;
+            z-index: 999;
+        }
+
+            .add-new-state-wrapper .material-symbols-outlined {
+                vertical-align: middle;
+                font-size: 20px;
+                position: relative;
+                top: -2px;
+                margin-right: 5px;
+            }
     </style>
 
 </head>
 <body>
+
+    <div class="headerBox">
+        <!--<button>Generate</button>-->
+        <div class="add-new-state-wrapper" onclick="GenerateNDCObject(event)">
+            <span class="material-symbols-outlined add-node-icon"> add_box </span> Generate
+        </div>
+        <div class="navigation-wrapper">
+            <ul>
+                <li>
+                    <a href="/StatesMaster">States</a>
+                </li>
+                <li>
+                    <a href="screens.html" class="active">Screens</a>
+                </li>
+                <li>
+                    <a href="timer.html">Timer</a>
+                </li>
+                <li>
+                    <a href="fits.html">FITS</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <input type="text" hidden name="" id="ImgID">
     <input type="text" hidden name="" id="ImgSrc">
-    <div class="CodePanel">
-        <div class="ActionButtons buttonsLeft">
-            <button class="ActBtn btnLeft" btnid="b1" id="AddCursorBtn">Cursor Point <br /></button>
-            <button class="ActBtn btnLeft" btnid="b2" id="AddTextBtn">Text<br /></button>
-            <button class="ActBtn btnLeft" btnid="b3" id="ClearScreenBtn">Clear Screen<br /></button>
-            <button class="ActBtn btnLeft" btnid="b4" id="AddImageBtn">Add Image<br /></button>
-        </div>
-        <textarea id="CodeField" name="CodeField"></textarea>
-    </div>
-    <div class="drawingButtonsPanel">
-        <div class="hiddenFileField">
-            <input type="file" id="UploadFile" accept="image/png, image/jpeg, image/gif" onchange="onChange_UploadFile()" />
-        </div>
-        <input type="button" class="panelBtn btn_Upload" value="Generate File" />
-        <input type="button" class="panelBtn btn_ToggleGrid" onclick="onclick_ToggleGrid()" value="Show Grid" />
-    </div>
-    <div class="drawingArea">
-        <div class="atmButtonsContextMenu genericContextMenu">
-            <span class="btnAction" uid="actionNext" lbl="Next Screen">&#187; Next Screen</span>
-            <span class="btnAction" uid="actionPrevious" lbl="Previous Screen">&#171; Previous Screen</span>
-            <span class="btnAction" uid="actionSpecfic" lbl="Specific Screen">&#9856; Specific Screen</span>
-            <span class="btnAction" uid="actionUnassign" lbl="N/A">&#128473; No Action</span>
-        </div>
-        <div class="atmButtons buttonsLeft">
-            <button class="atmBtn btnLeft" btnid="b1">Button 1 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
-            <button class="atmBtn btnLeft" btnid="b2">Button 2 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
-            <button class="atmBtn btnLeft" btnid="b3">Button 3 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
-            <button class="atmBtn btnLeft" btnid="b4">Button 4 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
-        </div>
-        <div class="canvasContainer">
-            <div>
-                <div></div>
+    
+    
+    <div id="FileUploadArea">
+        <div class="col-6 read-a-file-area" id="ReadFileArea">
+            <div class="inner">
+                <span class="material-symbols-outlined">
+                    desktop_windows
+                </span>
+                <div>Read Screen File</div>
+                <div class="file-area">
+                    <input class="form-control" type="file" id="formFile">
+                    <div class="file-upload-btn">
+                        Upload file
+                    </div>
+
+                    <div class="progress invisible">
+                        <p class="progress-text"></p>
+                        <div class="progress-bar progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                    </div>
+                </div>
             </div>
-            <canvas id="canvas"></canvas>
-        </div>
-        <div class="atmButtons buttonsRight">
-            <button class="atmBtn btnRight" btnid="b5">Button 5 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
-            <button class="atmBtn btnRight" btnid="b6">Button 6 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
-            <button class="atmBtn btnRight" btnid="b7">Button 7 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
-            <button class="atmBtn btnRight" btnid="b8">Button 8 <br /><span class="action">Action:<span class="actionName">N/A</span></span></button>
         </div>
     </div>
-    <div class="atmScreens">
-        <div class="atmScreensContextMenu genericContextMenu" onclick="onClick_RemoveScreen()">
-            &#10005; Remove this screen
+    <div id="FieldsAreaWrapper" style="display: none;">
+        <div class="CodePanel">
+            <div class="ActionButtons buttonsLeft">
+                <button class="ActBtn btnLeft" btnid="b1" id="AddCursorBtn">Cursor Point <br /></button>
+                <button class="ActBtn btnLeft" btnid="b2" id="AddTextBtn">Text<br /></button>
+                <button class="ActBtn btnLeft" btnid="b3" id="ClearScreenBtn">Clear Screen<br /></button>
+                <button class="ActBtn btnLeft" btnid="b4" id="AddImageBtn">Add Image<br /></button>
+            </div>
+            <textarea id="CodeField" name="CodeField"></textarea>
         </div>
-        <div class="atmScreen editableScreen active" title="Active Screen" uid="">
-            <img class="imgThumbnail">
+        <div class="drawingArea">
+            <div class="atmButtonsContextMenu genericContextMenu">
+                <span class="btnAction" uid="actionNext" lbl="Next Screen">&#187; Next Screen</span>
+                <span class="btnAction" uid="actionPrevious" lbl="Previous Screen">&#171; Previous Screen</span>
+                <span class="btnAction" uid="actionSpecfic" lbl="Specific Screen">&#9856; Specific Screen</span>
+                <span class="btnAction" uid="actionUnassign" lbl="N/A">&#128473; No Action</span>
+            </div>
+            <span class="ATMScreenArea" style="position:relative;">
+                <div class="horizontal-points">
+                    <div class="points-box">@</div>
+                    <div class="points-box">A</div>
+                    <div class="points-box">B</div>
+                    <div class="points-box">C</div>
+                    <div class="points-box">D</div>
+                    <div class="points-box">E</div>
+                    <div class="points-box">F</div>
+                    <div class="points-box">G</div>
+                    <div class="points-box">H</div>
+                    <div class="points-box">I</div>
+                    <div class="points-box">J</div>
+                    <div class="points-box">K</div>
+                    <div class="points-box">L</div>
+                    <div class="points-box">M</div>
+                    <div class="points-box">N</div>
+                    <div class="points-box">O</div>
+                    <div class="points-box">0</div>
+                    <div class="points-box">1</div>
+                    <div class="points-box">2</div>
+                    <div class="points-box">3</div>
+                    <div class="points-box">4</div>
+                    <div class="points-box">5</div>
+                    <div class="points-box">6</div>
+                    <div class="points-box">7</div>
+                    <div class="points-box">8</div>
+                    <div class="points-box">9</div>
+                    <div class="points-box">:</div>
+                    <div class="points-box">;</div>
+                    <div class="points-box"><</div>
+                    <div class="points-box">=</div>
+                    <div class="points-box">></div>
+                    <div class="points-box">?</div>
+                </div>
+                <div class="vertical-points">
+                    <div class="vertical-points-box">@</div>
+                    <div class="vertical-points-box">A</div>
+                    <div class="vertical-points-box">B</div>
+                    <div class="vertical-points-box">C</div>
+                    <div class="vertical-points-box">D</div>
+                    <div class="vertical-points-box">E</div>
+                    <div class="vertical-points-box">F</div>
+                    <div class="vertical-points-box">G</div>
+                    <div class="vertical-points-box">H</div>
+                    <div class="vertical-points-box">I</div>
+                    <div class="vertical-points-box">J</div>
+                    <div class="vertical-points-box">K</div>
+                    <div class="vertical-points-box">L</div>
+                    <div class="vertical-points-box">M</div>
+                    <div class="vertical-points-box">N</div>
+                    <div class="vertical-points-box">O</div>
+                </div>
+                <div class="canvasContainer">
+                    <canvas id="canvas"></canvas>
+                </div>
+            </span>
         </div>
-        <div class="atmScreen addNew" onclick="onClick_AddNewScreen(event)" title="Add New Screen">Add New Screen</div>
+        <div class="atmScreensWrapper">
+            <div class="atmScreensContextMenu genericContextMenu" onclick="onClick_RemoveScreen()">
+                &#10005; Remove this screen
+            </div>
+            <div class="atmScreens">
+                <div class="atmScreen editableScreen active" title="Active Screen" uid="">
+                    <img class="imgThumbnail">
+                </div>
+                <div class="atmScreen addNew" onclick="onClick_AddNewScreen(event)" title="Add New Screen">Add New Screen</div>
+            </div>
+        </div>
     </div>
+    
+
 
     <div class="modal fade" tabindex="-1" role="dialog" id="CursorModal">
         <div class="modal-dialog" role="document">
@@ -471,6 +802,9 @@
 
         var DummyObj = [];
         var tempObj = {};
+        var ScreenCount;
+        var FileParsedObj = [];
+        var LastScreen;
 
         $("#terminalScreen").mousedown(function (e) { handleMouseDown(e); });
         $("#terminalScreen").mousemove(function (e) { handleMouseMove(e); });
@@ -575,53 +909,61 @@
         }
 
         function onClick_AddNewScreen(e) {
+            var TempObj = [];
 
-            var CodeFieldVal = "";
-            atmScreens[activeScreenUID].code = $("#CodeField").val();
+            var LastScreenID = Number(LastScreen[0]) + 1;
 
-            const canvas_ID = document.getElementById("canvas");
+            LastScreenID = LastScreenID.toString().padStart(3, "0")
 
-            //const URL = canvas_ID.toDataURL();
-            //if (atmScreens[activeScreenUID].isImageUploaded != "1") {
-            //    atmScreens[activeScreenUID].url = URL;
-            //}
+            TempObj[0] = LastScreenID;
 
-
-            //var currentState = $(e.target).prev().find("img").attr('id');
-            ////console.log(currentState);
-            //const img_from_canvas = document.getElementById(currentState);
-            //img_from_canvas.src = canvas_ID.toDataURL();
-
-            var newScreenID = "atmSC" + new Date().getTime();
-            activeScreenUID = newScreenID;
-
-            $(e.target).before("<div class='atmScreen editableScreen'><img class='imgThumbnail' id=" + activeScreenUID + "></div>");
-
-            atmScreens[activeScreenUID] = {
+            //LastScreen = LastScreen + 1;
+            var newScreenID = $('.atmScreen').last().attr("uid") + 1;
+            atmScreens[newScreenID] = {
                 url: "",
                 rect: {},
                 buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
                 filename: "",
-                code: ""
+                code: "",
+                isImageUploaded: ""
             }
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawGrid();
+            RenderDynamicScreens(TempObj,ScreenCount++,"Add")
 
 
-            $("#CodeField").val("").html("");
-            $(e.target).prev().eq(0).attr("uid", newScreenID).trigger("click");
-            //drawAll();
-            ScreenID++;
-            if (ScreenID == 1) {
-                $("#CodeField").append("\n");
-            }
-            var Length = 3;
-            ScreenID = ScreenID.toString();
-            while (ScreenID.length < Length) ScreenID = "0" + ScreenID;
-            CodeFieldVal += ScreenID;
-            CodeFieldVal += "\n";
-            $("#CodeField").val(CodeFieldVal);
+            //var CodeFieldVal = "";
+            //atmScreens[activeScreenUID].code = $("#CodeField").val();
+
+            //const canvas_ID = document.getElementById("canvas");
+            //var newScreenID = "atmSC" + new Date().getTime();
+            //activeScreenUID = newScreenID;
+
+            //$(e.target).before("<div class='atmScreen editableScreen'><img class='imgThumbnail' id=" + activeScreenUID + "></div>");
+
+            //atmScreens[activeScreenUID] = {
+            //    url: "",
+            //    rect: {},
+            //    buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
+            //    filename: "",
+            //    code: ""
+            //}
+
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
+            //drawGrid();
+
+
+            //$("#CodeField").val("").html("");
+            //$(e.target).prev().eq(0).attr("uid", newScreenID).trigger("click");
+            ////drawAll();
+            //ScreenID++;
+            //if (ScreenID == 1) {
+            //    $("#CodeField").append("\n");
+            //}
+            //var Length = 3;
+            //ScreenID = ScreenID.toString();
+            //while (ScreenID.length < Length) ScreenID = "0" + ScreenID;
+            //CodeFieldVal += ScreenID;
+            //CodeFieldVal += "\n";
+            //$("#CodeField").val(CodeFieldVal);
         }
 
         $(function () {
@@ -686,10 +1028,10 @@
                             var Y_Position = CoordinateMapY[Coordinates[0]];
 
                             Object.values(TempVar.split(" ")).forEach((value, index) => {
-                                
+
                                 if ((value).includes("P2")) {
                                     base_image = new Image();
-                                    base_image.src = 'http://localhost/StatesMaster/img/screens/' + TempVar.split(" ")[index + 1] + '.jpg';
+                                    base_image.src = 'http://localhost:81/ATMRepo/img/screens/' + TempVar.split(" ")[index + 1] + '.jpg';
                                     base_image.onload = function () {
                                         ctx.drawImage(base_image, Xaxis, Y_Position);
                                     }
@@ -718,7 +1060,7 @@
                         }
 
                     }
-                    
+
                 });
 
                 for (var x = 0; x < atmScreens[activeScreenUID].code.split(",").length; x++) {
@@ -771,6 +1113,19 @@
                 //drawAll();
             });
 
+            $('.file-upload-btn').on("click", function () {
+                $("#formFile").trigger("click");
+            })
+
+            $("#CodeField").on("change", function () {
+                $("#CodeField").val()
+            })
+
+            $("#formFile").on("change", function () {
+                $("#FieldsAreaWrapper").show();
+                $("#FileUploadArea").hide();
+            })
+
             GetAllImagesList();
 
             $.get("./RawData/o2screens.txt", function (response) {
@@ -803,13 +1158,13 @@
                     SanitizedData.push("FS");
                 }
 
-                var TempObj = [];
+
                 var Counter = 0;
 
                 for (var z = 0; z < SanitizedData.length; z++) {
                     if (SanitizedData[z] != "FS") {
-                        TempObj[Counter] += SanitizedData[z];
-                        TempObj[Counter] += "\n";
+                        FileParsedObj[Counter] += SanitizedData[z];
+                        FileParsedObj[Counter] += "\n";
                     }
                     if (SanitizedData[z] == "FS") {
                         Counter++;
@@ -818,14 +1173,18 @@
 
                 $('.ui-sortable').html("");
 
-                for (var w = 0; w < TempObj.length; w++) {
-                    var TempVar = TempObj[w].replace("undefined", "").split("\n");
-                    RenderDynamicScreens(TempVar, w);
-                    console.log();
-                    if (TempObj.length - 1 == w) {
+                for (var w = 0; w < FileParsedObj.length; w++) {
+                    var TempVar = FileParsedObj[w].replace("undefined", "").split("\n");
+                    console.log("TempVar : ", TempVar);
+                    RenderDynamicScreens(TempVar, w, "Edit");
+                    if (FileParsedObj.length - 1 == w) {
                         RenderAddNewScreen(w+1);
                     }
                 }
+                ScreenCount = FileParsedObj.length;
+
+                LastScreen = FileParsedObj[FileParsedObj.length - 1];
+                LastScreen = LastScreen.replace("undefined", "").split("\n");
 
                 setTimeout(function () {
                     $(".editableScreen").first().trigger("click");
@@ -926,7 +1285,7 @@
                         var filename = this.href.replace(window.location.host, "").replace("http://", "");
                         var n = filename.lastIndexOf('/');
                         var TrimmedFileName = filename.substring(n + 1);
-                        var tempURL = "http://localhost/";
+                        var tempURL = "http://localhost:81/";
 
                         //$(".owl-carousel").append("<div><a target='_blank' href='"+ tempURL + filename + "'>" +
                         $(".owl-carousel").append("<div><div class='ATMImg' onclick='OnClickSelectImage(event)' uid=" + TrimmedFileName + ">" +
@@ -965,7 +1324,7 @@
 
                             }
 
-        function RenderDynamicScreens(data, index) {
+        function RenderDynamicScreens(data, index, operationType) {
 
             var FirstIndex = data[0];
             FirstIndex = $.trim(FirstIndex);
@@ -980,13 +1339,17 @@
                 code: data.join(","),
                 isImageUploaded: ""
             }
-
-            $('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen editableScreen'>Screen " + index+"</div>");
+            if (operationType == "Add") {
+                $('.addNew').before("<div uid=" + newScreenID + " class='atmScreen editableScreen'>Screen " + index + "</div>");
+            }
+            else {
+                $('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen editableScreen'>Screen " + index + "</div>");
+            }
 
         }
 
         function RenderAddNewScreen(index) {
-                                
+
             var newScreenID = $('.atmScreen').last().attr("uid") + 1;
 
             atmScreens[newScreenID] = {
@@ -998,7 +1361,9 @@
                 isImageUploaded: ""
             }
 
-            $('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen newScreen editableScreen'>Add Screen</div>");
+
+            //$('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen newScreen editableScreen'>Add Screen</div>");
+            $('.ui-sortable').append('<div class="atmScreen addNew" uid="' + newScreenID + '" onclick="onClick_AddNewScreen(event)" title ="Add New Screen">Add New Screen</div>');
         }
 
         var CoordinateMapX = {
