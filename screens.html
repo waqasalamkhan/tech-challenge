@@ -150,15 +150,21 @@
             box-sizing: border-box;
             z-index: 999;
             line-height: 83px;
-            color: #fff;
+            color: #222;
+            background: #fff;
+            font-size: 14px;
+        }
+        .newScreen {
+            background: rgba(255,255,255,0.3);
+            color: #222;
         }
 
-            .atmScreen.addNew {
-                border-style: dashed;
-                text-align: center;
-                padding-top: 20px;
-                color: rgba(255 255 255 / 68%);
-            }
+        .atmScreen.addNew {
+            border-style: dashed;
+            text-align: center;
+            padding-top: 20px;
+            color: rgba(255 255 255 / 68%);
+        }
 
             .atmScreen.active {
                 border-color: green;
@@ -207,6 +213,9 @@
         .imgThumbnail {
             width: 100px;
             z-index: -999;
+        }
+        .atmButtons {
+            display: none;
         }
     </style>
 
@@ -674,7 +683,7 @@
                             var Coordinates = after.split("");
 
                             var Xaxis = CoordinateMapX[Coordinates[0]];
-                            var Y_Position = CoordinateMapX[Coordinates[0]];
+                            var Y_Position = CoordinateMapY[Coordinates[0]];
 
                             Object.values(TempVar.split(" ")).forEach((value, index) => {
                                 
@@ -696,12 +705,13 @@
                             var Coordinates = after.split("");
 
                             var Xaxis = CoordinateMapX[Coordinates[0]];
-                            var Y_Position = CoordinateMapX[Coordinates[0]];
+                            var Y_Position = CoordinateMapY[Coordinates[0]];
+
                             var text = atmScreens[activeScreenUID].code.split(",")[index + 1]
                             var myArray = text.split("");
 
                             for (var i = 0; i < myArray.length; i++) {
-                                ctx.font = "26px Arial";
+                                ctx.font = "20px Arial";
                                 ctx.fillText(myArray[i], Xaxis, Y_Position);
                                 Xaxis = Xaxis + 20;
                             }
@@ -828,6 +838,10 @@
                 for (var w = 0; w < TempObj.length; w++) {
                     var TempVar = TempObj[w].replace("undefined", "").split("\n");
                     RenderDynamicScreens(TempVar, w);
+                    console.log();
+                    if (TempObj.length - 1 == w) {
+                        RenderAddNewScreen(w+1);
+                    }
                 }
 
                 setTimeout(function () {
@@ -986,7 +1000,22 @@
 
             $('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen editableScreen'>Screen " + index+"</div>");
 
+        }
 
+        function RenderAddNewScreen(index) {
+                                
+            var newScreenID = $('.atmScreen').last().attr("uid") + 1;
+
+            atmScreens[newScreenID] = {
+                url: "",
+                rect: {},
+                buttons: { "b1": "N/A", "b2": "N/A", "b3": "N/A", "b4": "N/A", "b5": "N/A", "b6": "N/A", "b7": "N/A", "b8": "N/A" },
+                filename: "",
+                code: "",
+                isImageUploaded: ""
+            }
+
+            $('.ui-sortable').append("<div uid=" + newScreenID + " class='atmScreen newScreen editableScreen'>Add Screen</div>");
         }
 
         var CoordinateMapX = {

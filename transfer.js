@@ -759,10 +759,10 @@ function OnPageLoadTriggerBaseNode(nodeid) {
         var ImageID = $(this).data('id');
 
         $.ajax({
-            url: window.location.href + 'img/screens/PIC' + $(this).data('id') + ".jpg",
+            url: window.location.href + 'img/screens/pic' + $(this).data('id') + ".jpg",
             processData: false,
             success: function () {
-                $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/PIC' + ImageID + ".jpg");
+                $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/pic' + ImageID + ".jpg");
             },
             error: function (r, x) {
                 $("#IMAGE_ID").attr("src", window.location.href + "img/screens/no-image.png");
@@ -852,10 +852,10 @@ $(document).ready(function () {
             var ImageID = $(this).data('id');
 
             $.ajax({
-                url: window.location.href + 'img/screens/' + $(this).data('id') + ".jpg",
+                url: window.location.href + 'img/screens/pic' + $(this).data('id') + ".jpg",
                 processData: false,
                 success: function () {
-                    $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/' + ImageID + ".jpg");
+                    $("#IMAGE_ID").attr("src", window.location.href + 'img/screens/pic' + ImageID + ".jpg");
 
                 },
                 error: function (error) {
