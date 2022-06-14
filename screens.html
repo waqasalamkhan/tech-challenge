@@ -730,9 +730,8 @@
     <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script type="text/javascript">
-        //Taha
-
+    <script type="text/javascript" >
+       
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
         canvas.width = 640;
@@ -786,6 +785,7 @@
             offsetX = BB.left;
             offsetY = BB.top;
         }
+
         var offsetX, offsetY;
         reOffset();
         window.onscroll = function (e) { reOffset(); }
@@ -1045,10 +1045,8 @@
                             var str = value.split(" ")[1];
                             var after = str.substring(str.indexOf(' ') + 1);
                             var Coordinates = after.split("");
-
                             var Xaxis = CoordinateMapX[Coordinates[0]];
                             var Y_Position = CoordinateMapY[Coordinates[0]];
-
                             var text = atmScreens[activeScreenUID].code.split(",")[index + 1]
                             var myArray = text.split("");
 
@@ -1158,7 +1156,7 @@
                     SanitizedData.push("FS");
                 }
 
-
+                
                 var Counter = 0;
 
                 for (var z = 0; z < SanitizedData.length; z++) {
@@ -1175,7 +1173,6 @@
 
                 for (var w = 0; w < FileParsedObj.length; w++) {
                     var TempVar = FileParsedObj[w].replace("undefined", "").split("\n");
-                    console.log("TempVar : ", TempVar);
                     RenderDynamicScreens(TempVar, w, "Edit");
                     if (FileParsedObj.length - 1 == w) {
                         RenderAddNewScreen(w+1);
@@ -1402,22 +1399,39 @@
         }
 
         var CoordinateMapY = {
-            "@": 0,
-            "A": 26,
-            "B": 52,
-            "C": 78,
-            "D": 104,
-            "E": 130,
-            "F": 156,
-            "G": 182,
-            "H": 208,
-            "I": 234,
-            "J": 260,
-            "K": 286,
-            "L": 312,
-            "M": 338,
-            "N": 364,
-            "O": 390
+            //"@": 0,
+            //"A": 26,
+            //"B": 52,
+            //"C": 78,
+            //"D": 104,
+            //"E": 130,
+            //"F": 156,
+            //"G": 182,
+            //"H": 208,
+            //"I": 234,
+            //"J": 260,
+            //"K": 286,
+            //"L": 312,
+            //"M": 338,
+            //"N": 364,
+            //"O": 390
+
+            "@": 26,
+            "A": 52,
+            "B": 78,
+            "C": 104,
+            "D": 130,
+            "E": 156,
+            "F": 182,
+            "G": 208,
+            "H": 234,
+            "I": 260,
+            "J": 286,
+            "K": 312,
+            "L": 338,
+            "M": 364,
+            "N": 390,
+            "O": 416
         }
 
     </script>
