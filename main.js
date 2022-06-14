@@ -340,19 +340,22 @@ class StatesService{
         addStateLinks(parsed, ['device_available_next_state', 'device_unavailable_next_state',]);
         break;
   
-      case 'W':
-        {
-          parsed.set('description', 'FDK Switch state');
-          let states = {};
-          let states_to = [];
-          ['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I'].forEach( (element, index) => {
-            states[element] = this.getEntry(data, index + 2);
-            states_to.push(states[element]);
-          });
-          parsed.set('states', states);
-          parsed.set('states_to', states_to);
-        }
-        break;
+          case 'W':
+              {
+                  parsed.set('description', 'FDK Switch');
+
+                  parsed.set('fdk_A_next_state', this.getEntry(data, 2));
+                  parsed.set('fdk_B_next_state', this.getEntry(data, 3));
+                  parsed.set('fdk_C_next_state', this.getEntry(data, 4));
+                  parsed.set('fdk_D_next_state', this.getEntry(data, 5));
+                  parsed.set('fdk_F_next_state', this.getEntry(data, 6));
+                  parsed.set('fdk_G_next_state', this.getEntry(data, 7));
+                  parsed.set('fdk_H_next_state', this.getEntry(data, 8));
+                  parsed.set('fdk_I_next_state', this.getEntry(data, 9));
+
+                  addStateLinks(parsed, ['fdk_A_next_state', 'fdk_B_next_state', 'fdk_C_next_state', 'fdk_D_next_state', 'fdk_F_next_state', 'fdk_G_next_state', 'fdk_H_next_state', 'fdk_I_next_state']);
+                  break;
+              }
    
       case 'X':
         parsed.set('description', 'FDK information entry state');
@@ -363,6 +366,7 @@ class StatesService{
           'extension_state', 
           'buffer_id', 
           'FDK_active_mask',
+          'reserved',
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
@@ -415,6 +419,7 @@ class StatesService{
           'extension_state_1',
           'extension_state_2',
           'extension_state_3',
+          'reserved',
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
@@ -426,6 +431,10 @@ class StatesService{
           'icc_app_name_template_screen_number',
           'icc_app_name_screen_number',
           'extension_state',
+          'reserved_1',
+          'reserved_2',
+          'reserved_3',
+          'reserved_4',
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
@@ -438,7 +447,9 @@ class StatesService{
           'transaction_type',
           'amount_authorized_source',
           'amount_other_source',
-          'amount_too_large_next_state',
+        'reserved_1',
+        'reserved_2',
+        'reserved_3'
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
@@ -467,6 +478,8 @@ class StatesService{
           'automatic_icc_app_selection_flag',
           'default_app_label_usage_flag',
           'cardholder_confirmation_flag',
+          'screen_to_clear',
+          'reserved',
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
@@ -515,6 +528,9 @@ class StatesService{
           'action_keys_extension_state_number',
           'exit_paths_extension_state_number',
           'single_app_cardholder_selection_screen_number',
+          'reserved_1',
+          'reserved_2',
+          'reserved_3',
         ].forEach( (element, index) => {
           parsed.set(element, this.getEntry(data, index + 2));
         });
